@@ -1,0 +1,17 @@
+name: 'Generate library documentation'
+description: 'Automate generation of release documentation when CI build finishes'
+inputs:
+  tag-name:
+    description: 'Who to greet'
+    required: true
+  ci-system:
+    description: 'CI system used to build the tag (Travis or AppVeyor)'
+    required: true
+    default: 'AppVeyor'
+  job-id:
+    description: 'Identifier of the job associated to the build'
+    required: true
+
+runs:
+  using: 'node12'
+  main: 'index.js'
