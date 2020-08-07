@@ -1,0 +1,21 @@
+{
+  "name": "cpp-library-doc-action",
+  "version": "1.0.0",
+  "description": "GitHub action to generate documentation for a C++ library",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/systelab/cpp-library-doc-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/systelab/cpp-library-doc-action/issues"
+  },
+  "homepage": "https://github.com/systelab/cpp-library-doc-action#readme",
+  "dependencies": {
+    "@actions/core": "1.2.4",
+    "@actions/github": "4.0.0"
+  }
+}
