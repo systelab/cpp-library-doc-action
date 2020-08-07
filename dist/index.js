@@ -153,6 +153,83 @@ function onceStrict (fn) {
 
 /***/ }),
 
+/***/ 56:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GitHubRelease = void 0;
+const core = __importStar(__webpack_require__(470));
+const GitHub = __importStar(__webpack_require__(469));
+const fs = __importStar(__webpack_require__(747));
+const path = __importStar(__webpack_require__(622));
+class GitHubRelease {
+    static uploadAsset(name, filepath) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const token = process.env.GITHUB_TOKEN;
+            const client = GitHub.getOctokit(token);
+            const repoOwner = core.getInput("owner");
+            const repoName = core.getInput("repo-name");
+            const tagName = core.getInput("tag-name");
+            if (!this.releaseInternalId) {
+                console.log("Querying for GitHub Release internal identifier...");
+                const releaseDataResponse = yield client.repos.getReleaseByTag({
+                    owner: repoOwner,
+                    repo: repoName,
+                    tag: tagName
+                });
+                this.releaseInternalId = releaseDataResponse.data.id;
+                console.log(`Internal release identifer for '${repoOwner}/${repoName}@${tagName}' is ${this.releaseInternalId}`);
+                console.log("");
+            }
+            console.log(`Uploading '${name}' asset (file '${path.basename(filepath)}') to GitHub Release...`);
+            const uploadAssetResponse = yield client.repos.uploadReleaseAsset({
+                owner: repoOwner,
+                repo: repoName,
+                release_id: this.releaseInternalId,
+                name,
+                label: name,
+                data: fs.readFileSync(filepath)
+            });
+            console.log("Asset uploaded successfully ");
+            console.log("");
+        });
+    }
+}
+exports.GitHubRelease = GitHubRelease;
+
+
+/***/ }),
+
 /***/ 87:
 /***/ (function(module) {
 
@@ -517,8 +594,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
-const GitHub = __importStar(__webpack_require__(469));
 const fs = __importStar(__webpack_require__(747));
+const github_release_1 = __webpack_require__(56);
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const repoOwner = core.getInput("owner");
@@ -532,27 +609,16 @@ const fs = __importStar(__webpack_require__(747));
         // Generate build log file
         const buildLogFilename = `${libraryName}-${tagName}-${configurationName}-BuildLog.txt`;
         const buildLog = "This is the build log gathered from AppVeyor";
-        fs.writeFileSync(`${libraryName}-${tagName}-${configurationName}-BuildLog.txt`, buildLog);
+        fs.writeFileSync(buildLogFilename, buildLog);
         console.log("Build log file generated successfully");
-        // Upload build log as a release asset
-        const token = process.env.GITHUB_TOKEN;
-        const client = GitHub.getOctokit(token);
-        const releaseData = yield client.repos.getReleaseByTag({
-            owner: repoOwner,
-            repo: repoName,
-            tag: tagName
-        });
-        console.log("Data of release to upload asset:");
-        console.log(releaseData);
-        const uploadAssetResponse = yield client.repos.uploadReleaseAsset({
-            owner: repoOwner,
-            repo: repoName,
-            release_id: releaseData.data.id,
-            name: buildLogFilename,
-            data: fs.readFileSync(buildLogFilename)
-        });
-        console.log("After uploading asset:");
-        console.log(uploadAssetResponse);
+        // Generate build log file 2
+        const buildLogFilename2 = `${libraryName}-${tagName}-${configurationName}-BuildLog2.txt`;
+        const buildLog2 = "This is the build log gathered from Travis";
+        fs.writeFileSync(buildLogFilename2, buildLog2);
+        console.log("Build log 2 file generated successfully");
+        // Upload build logs as a release assets
+        yield github_release_1.GitHubRelease.uploadAsset(buildLogFilename, buildLogFilename);
+        yield github_release_1.GitHubRelease.uploadAsset(buildLogFilename2, buildLogFilename2);
     }
     catch (error) {
         core.setFailed(error.message);
