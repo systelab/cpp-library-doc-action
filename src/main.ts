@@ -1,6 +1,8 @@
 import * as core from "@actions/core";
-import * as GitHub from "@actions/github";
 import * as fs from "fs";
+
+import { GitHubRelease } from "./github-release";
+
 
 (async () =>
 {
@@ -19,32 +21,18 @@ import * as fs from "fs";
         // Generate build log file
         const buildLogFilename = `${libraryName}-${tagName}-${configurationName}-BuildLog.txt`;
         const buildLog = "This is the build log gathered from AppVeyor";
-        fs.writeFileSync(`${libraryName}-${tagName}-${configurationName}-BuildLog.txt`, buildLog);
+        fs.writeFileSync(buildLogFilename, buildLog);
         console.log("Build log file generated successfully");
 
-        // Upload build log as a release asset
-        const token: string = process.env.GITHUB_TOKEN as string;
-        const client = GitHub.getOctokit(token);
+        // Generate build log file 2
+        const buildLogFilename2 = `${libraryName}-${tagName}-${configurationName}-BuildLog2.txt`;
+        const buildLog2 = "This is the build log gathered from Travis";
+        fs.writeFileSync(buildLogFilename2, buildLog2);
+        console.log("Build log 2 file generated successfully");
 
-        const releaseData = await client.repos.getReleaseByTag({
-            owner: repoOwner,
-            repo: repoName,
-            tag: tagName
-        });
-
-        console.log("Data of release to upload asset:");
-        console.log(releaseData);
-
-        const uploadAssetResponse = await client.repos.uploadReleaseAsset({
-            owner: repoOwner,
-            repo: repoName,
-            release_id: releaseData.data.id,
-            name: buildLogFilename,
-            data: fs.readFileSync(buildLogFilename)
-        });
-
-        console.log("After uploading asset:");
-        console.log(uploadAssetResponse);
+        // Upload build logs as a release assets
+        await GitHubRelease.uploadAsset(buildLogFilename, buildLogFilename);
+        await GitHubRelease.uploadAsset(buildLogFilename2, buildLogFilename2);
     }
     catch (error)
     {
