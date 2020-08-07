@@ -2,9 +2,11 @@
   "name": "cpp-library-doc-action",
   "version": "1.0.0",
   "description": "GitHub action to generate documentation for a C++ library",
-  "main": "index.js",
+  "main": "lib/main.js",
   "scripts": {
-    "build": "ncc build index.js"
+    "build": "tsc",
+    "package": "ncc build --source-map",
+    "all": "npm run build && npm run package"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,11 @@
   "homepage": "https://github.com/systelab/cpp-library-doc-action#readme",
   "dependencies": {
     "@actions/core": "1.2.4",
-    "@actions/github": "4.0.0",
-    "@zeit/ncc": "0.22.3"
+    "@actions/github": "4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "14.0.25",
+    "@zeit/ncc": "0.22.3",
+    "typescript": "3.9.7"
   }
 }
