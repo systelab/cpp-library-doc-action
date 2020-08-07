@@ -2,12 +2,21 @@ name: 'Generate library documentation'
 description: 'Automate generation of release documentation when CI build finishes'
 
 inputs:
+  owner:
+    description: 'Owner of the repository'
+    required: true
+    default: ${{ github.repository_owner }}
+  repo-name:
+    description: 'Name of the repository'
+    required: true
+    default: ${{ github.repository_owner }}
   library-name:
-    description: 'Name of the library'
+    description: 'Name of the library (used in generated docs)'
     required: true
   tag-name:
     description: 'Name of the tag to generate the documentation'
     required: true
+    default: ${{ github.ref }}
   configuration-name:
     description: 'Name of the configuration associated to current build'
     required: true
