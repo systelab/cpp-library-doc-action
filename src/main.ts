@@ -44,7 +44,7 @@ import * as fs from "fs";
         });
 
         console.log("After uploading asset:");
-        console.log(releaseData);
+        console.log(uploadAssetResponse);
     }
     catch (error)
     {
