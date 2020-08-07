@@ -8,7 +8,7 @@ export class GitHubRelease
 {
     private static releaseInternalId: number;
 
-    public static async uploadAsset(name: string, filepath: string): Promise<void>
+    public static async uploadAsset(filepath: string): Promise<void>
     {
         const token: string = process.env.GITHUB_TOKEN as string;
         const client = GitHub.getOctokit(token);
@@ -31,13 +31,12 @@ export class GitHubRelease
             console.log("");
         }
 
-        console.log(`Uploading '${name}' asset (file '${path.basename(filepath)}') to GitHub Release...`);
+        console.log(`Uploading '${path.basename(filepath)}' asset to GitHub Release...`);
         const uploadAssetResponse = await client.repos.uploadReleaseAsset({
             owner: repoOwner,
             repo: repoName,
             release_id: this.releaseInternalId,
-            name,
-            label: name,
+            name: path.basename(filepath),
             data: fs.readFileSync(filepath)
         });
         console.log("Asset uploaded successfully ");
