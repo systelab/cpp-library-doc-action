@@ -2257,6 +2257,7 @@ exports.LogReporter = void 0;
 const core = __importStar(__webpack_require__(470));
 const fs = __importStar(__webpack_require__(747));
 const appveyor_1 = __webpack_require__(665);
+const travis_1 = __webpack_require__(558);
 class LogReporter {
     static buildLogReportFile() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -2274,7 +2275,7 @@ class LogReporter {
                 return appveyor_1.AppVeyor.getJobLog(jobId);
             }
             else if (ciSystem === "Travis") {
-                throw Error("Travis log retrieval not implemented yet");
+                return travis_1.Travis.getJobLog(jobId);
             }
             else {
                 throw Error("Unsupported continuous integration system");
@@ -6456,6 +6457,47 @@ function wrap(protocols) {
 // Exports
 module.exports = wrap({ http: http, https: https });
 module.exports.wrap = wrap;
+
+
+/***/ }),
+
+/***/ 558:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Travis = void 0;
+const axios_1 = __importDefault(__webpack_require__(53));
+class Travis {
+    static getJobLog(jobId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log(`Querying Travis CI for log of job '${jobId}'...`);
+            const response = yield axios_1.default.get(`https://api.travis-ci.org/v3/job/${jobId}/log.txt`);
+            if (response.status === 200) {
+                console.log("Job log obtained successfully from Travis CI.");
+                console.log("");
+                return response.data;
+            }
+            else {
+                throw Error("Error while querying Travis CI for job log: " + JSON.stringify(response));
+            }
+        });
+    }
+}
+exports.Travis = Travis;
 
 
 /***/ }),
