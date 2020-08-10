@@ -2,6 +2,7 @@ import * as core from "@actions/core";
 import * as fs from "fs";
 
 import { AppVeyor } from "./appveyor";
+import { Travis } from "./travis";
 
 
 export class LogReporter
@@ -26,7 +27,7 @@ export class LogReporter
         }
         else if (ciSystem === "Travis")
         {
-            throw Error("Travis log retrieval not implemented yet");
+            return Travis.getJobLog(jobId);
         }
         else
         {
