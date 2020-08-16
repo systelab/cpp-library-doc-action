@@ -17,8 +17,6 @@ export class LogReporter
 
         await PDFReport.generate(reportTitle, htmlReportContent, reportFilename);
 
-        fs.writeFileSync(reportFilename, logContent);
-
         return reportFilename;
     }
 
