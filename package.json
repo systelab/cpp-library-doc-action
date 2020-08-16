@@ -2,11 +2,12 @@
   "name": "cpp-library-doc-action",
   "version": "1.0.0",
   "description": "GitHub action to generate documentation for a C++ library",
-  "main": "lib/main.js",
+  "main": "lib/src/main.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --sourceMap",
     "package": "ncc build --source-map",
-    "all": "npm run build && npm run package"
+    "all": "npm run build && npm run package",
+    "test-pdf": "npm run build && node lib/test/pdf-report-test.js"
   },
   "repository": {
     "type": "git",
@@ -20,19 +21,18 @@
   },
   "homepage": "https://github.com/systelab/cpp-library-doc-action#readme",
   "dependencies": {
+    "@types/node": "14.0.25",
+    "@types/puppeteer": "3.0.1",
     "@actions/core": "1.2.4",
     "@actions/github": "4.0.0",
     "axios": "0.19.2",
-    "html-pdf": "2.2.0"
+    "puppeteer": "5.2.1",
+    "typescript": "3.9.7"
   },
   "devDependencies": {
-    "@types/html-pdf": "2.2.0",
-    "@types/node": "14.0.25",
-    "@zeit/ncc": "0.22.3",
     "codelyzer": "5.2.2",
     "eslint": "6.8.0",
     "tslint": "5.9.1",
-    "tslint-eslint-rules": "5.4.0",
-    "typescript": "3.9.7"
+    "tslint-eslint-rules": "5.4.0"
   }
 }
