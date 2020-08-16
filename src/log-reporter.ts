@@ -11,6 +11,8 @@ export class LogReporter
     {
         const logContent: string = await this.getJobLog();
         const reportFilename =  this.getLogReportFilepath();
+        const htmlReportContent = this.getHTMLReportContent(logContent);
+
         fs.writeFileSync(reportFilename, logContent);
 
         return reportFilename;
@@ -42,5 +44,24 @@ export class LogReporter
         const configurationName = core.getInput("configuration-name");
 
         return `${libraryName}-${tagName}-${configurationName}-BuildLog.log`;
+    }
+
+    private static getHTMLReportContent(logContent: string): string
+    {
+        const libraryName = core.getInput("library-name");
+        const tagName = core.getInput("tag-name");
+        const configurationName = core.getInput("configuration-name");
+
+        let logContentHTML = "";
+        const logContentLines = logContent.split(/\r\n|\n|\r/);
+        for (const logLine of logContentLines)
+        {
+            logContentHTML += `<div class="log-line">${logLine}</div>`;
+        }
+
+        return `<h1>1 Introduction</h1>
+                <p class="last">${libraryName} version ${tagName} was built on August 8th, 2020 for the "${configurationName}" configuration.</p>
+                <h1>2 Log</h1>
+                <div>${logContentHTML}</div>`;
     }
 }
