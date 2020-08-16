@@ -3,19 +3,30 @@ import * as fs from "fs";
 
 import { AppVeyor } from "./appveyor";
 import { Travis } from "./travis";
+import { PDFReport } from "./pdf-report";
 
 
 export class LogReporter
 {
     public static async buildLogReportFile(): Promise<string>
     {
+        const reportTitle = this.getReportTitle();
         const logContent: string = await this.getJobLog();
         const reportFilename =  this.getLogReportFilepath();
         const htmlReportContent = this.getHTMLReportContent(logContent);
 
+        await PDFReport.generate(reportTitle, htmlReportContent, reportFilename);
+
         fs.writeFileSync(reportFilename, logContent);
 
         return reportFilename;
+    }
+
+    private static getReportTitle(): string
+    {
+        const libraryName = core.getInput("library-name");
+        const tagName = core.getInput("tag-name");
+        return `${libraryName} compilation memo for version ${tagName}`;
     }
 
     private static async getJobLog(): Promise<string>
