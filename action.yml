@@ -31,11 +31,3 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.owner }}
-    - ${{ inputs.repo-name }}
-    - ${{ inputs.library-name }}
-    - ${{ inputs.tag-name }}
-    - ${{ inputs.configuration-name }}
-    - ${{ inputs.ci-system }}
-    - ${{ inputs.job-id }}
