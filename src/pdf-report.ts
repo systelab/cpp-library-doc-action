@@ -19,6 +19,11 @@ export class PDFReport
         await page.setViewport({width: 1440, height: 900, deviceScaleFactor: 2});
         await page.setContent(contentHTML);
 
+        if (!fs.existsSync(pdfFilepath))
+        {
+            fs.mkdirSync(pdfFilepath, { recursive: true });
+        }
+
         await page.pdf({ path: pdfFilepath,
                          displayHeaderFooter: true,
                          headerTemplate: pageHeaderHTML,
