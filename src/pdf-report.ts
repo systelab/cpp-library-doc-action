@@ -7,6 +7,8 @@ export class PDFReport
 {
     public static async generate(title: string, content: string, pdfFilepath: string): Promise<void>
     {
+        console.log(`Generating PDF report on '${pdfFilepath}'...`);
+
         const headHTML = this.getReportHeadHTML();
         const pageHeaderHTML = this.getPageHeaderHTML(title);
         const pageFooterHTML = this.getPageFooterHTML();
@@ -36,6 +38,9 @@ export class PDFReport
                          }});
 
         await browser.close();
+
+        console.log("PDF report generated successfully.");
+        console.log("");
     }
 
     private static getReportHeadHTML(): string
