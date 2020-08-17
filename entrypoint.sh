@@ -2,6 +2,6 @@
 
 echo "Running entrypoint.sh"
 echo "Current directory: $PWD"
-pwd
-
+cd /
+echo "Current directory: $PWD"
 npm run execute
