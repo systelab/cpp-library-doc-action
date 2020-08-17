@@ -15,7 +15,7 @@ export class PDFReport
                                 <body>${content}</body>
                              </html>`;
 
-        const browser = await puppeteer.launch({ headless: true });
+        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         const page = await browser.newPage();
         await page.setViewport({width: 1440, height: 900, deviceScaleFactor: 2});
         await page.setContent(contentHTML);
