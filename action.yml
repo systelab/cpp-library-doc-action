@@ -29,5 +29,9 @@ inputs:
     required: true
 
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'composite'
+  steps:
+    - run: npm install
+      shell: bash
+    - run: npm run all
+      shell: bash
