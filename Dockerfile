@@ -11,5 +11,5 @@ RUN npm install
 RUN npm run build
 
 # Configure image entrypoint
-RUN chmod +x entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
