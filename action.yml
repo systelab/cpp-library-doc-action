@@ -29,5 +29,13 @@ inputs:
     required: true
 
 runs:
-  - using: 'node12'
-  - main: 'lib/src/main.js'
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.owner }}
+    - ${{ inputs.repo-name }}
+    - ${{ inputs.library-name }}
+    - ${{ inputs.tag-name }}
+    - ${{ inputs.configuration-name }}
+    - ${{ inputs.ci-system }}
+    - ${{ inputs.job-id }}
