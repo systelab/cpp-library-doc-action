@@ -26,7 +26,6 @@ ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/google-chrome-stable
 
 # Copy action repository sources into container
 COPY . .
-RUN pwd
 
 # Install 3rd party dependencies
 RUN npm install
