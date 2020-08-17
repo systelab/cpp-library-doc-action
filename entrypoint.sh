@@ -1,5 +1,7 @@
 #!/bin/bash
 
 echo "Running entrypoint.sh"
-ls
+echo "Current directory: $PWD"
+pwd
+
 npm run execute
