@@ -7,6 +7,25 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Debug GitHub Action",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "action"],
+            "outFiles": ["${workspaceFolder}/lib/**/*.js"],
+            "env": {
+                "INPUT_OWNER": "systelab",
+                "INPUT_REPO_NAME": "cpp-trace-api",
+                "INPUT_LIBRARY_NAME": "TraceAPI",
+                "INPUT_TAG_NAME": "v1.0.4",
+                "INPUT_CONFIGURATION_NAME": "Visual Studio 2017 Win32 Release",
+                "INPUT_CI_SYSTEM": "AppVeyor",
+                "INPUT_JOB_ID": "04qt9dlcisd8mqqc",
+                "GITHUB_TOKEN": "PasteValidTokenHere"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Debug PDF Generation",
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "npm",
