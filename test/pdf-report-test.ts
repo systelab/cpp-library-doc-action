@@ -18,6 +18,6 @@ import { PDFReport } from "../src/pdf-report";
                            <h1>2 Report</h1>
                            <div>${logContentHTML}</div>`;
 
-    await PDFReport.generate("Trace API compilation memo for version 1.0.4", reportContent, "test/test-report.pdf");
+    await PDFReport.generate("Trace API compilation memo for version 1.0.4", reportContent, "report/test-report.pdf");
 
 })();

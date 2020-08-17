@@ -50,7 +50,7 @@ export class LogReporter
         const tagName = ActionInput.getTagName();
         const configurationName = ActionInput.getConfigurationName();
 
-        return `${libraryName}-${tagName}-${configurationName}-BuildLog.log`;
+        return `report/${libraryName}-${tagName}-${configurationName}-BuildLog.pdf`;
     }
 
     private static getHTMLReportContent(logContent: string): string
