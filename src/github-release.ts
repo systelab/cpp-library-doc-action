@@ -1,7 +1,8 @@
-import * as core from "@actions/core";
 import * as GitHub from "@actions/github";
 import * as fs from "fs";
 import * as path from "path";
+
+import { ActionInput } from "./action-input";
 
 
 export class GitHubRelease
@@ -13,9 +14,9 @@ export class GitHubRelease
         const token: string = process.env.GITHUB_TOKEN as string;
         const client = GitHub.getOctokit(token);
 
-        const repoOwner = core.getInput("owner");
-        const repoName = core.getInput("repo-name");
-        const tagName = core.getInput("tag-name");
+        const repoOwner = ActionInput.getRepositoryOwner();
+        const repoName = ActionInput.getRepositoryName();
+        const tagName = ActionInput.getTagName();
 
         if (!this.releaseInternalId)
         {

@@ -1,6 +1,4 @@
-import * as core from "@actions/core";
-import * as fs from "fs";
-
+import { ActionInput } from "./action-input";
 import { AppVeyor } from "./appveyor";
 import { Travis } from "./travis";
 import { PDFReport } from "./pdf-report";
@@ -22,15 +20,15 @@ export class LogReporter
 
     private static getReportTitle(): string
     {
-        const libraryName = core.getInput("library-name");
-        const tagName = core.getInput("tag-name");
+        const libraryName = ActionInput.getLibraryName();
+        const tagName = ActionInput.getTagName();
         return `${libraryName} compilation memo for version ${tagName}`;
     }
 
     private static async getJobLog(): Promise<string>
     {
-        const ciSystem = core.getInput("ci-system");
-        const jobId = core.getInput("job-id");
+        const ciSystem = ActionInput.getCISystem();
+        const jobId = ActionInput.getJobId();
 
         if (ciSystem === "AppVeyor")
         {
@@ -48,18 +46,18 @@ export class LogReporter
 
     private static getLogReportFilepath(): string
     {
-        const libraryName = core.getInput("library-name");
-        const tagName = core.getInput("tag-name");
-        const configurationName = core.getInput("configuration-name");
+        const libraryName = ActionInput.getLibraryName();
+        const tagName = ActionInput.getTagName();
+        const configurationName = ActionInput.getConfigurationName();
 
         return `${libraryName}-${tagName}-${configurationName}-BuildLog.log`;
     }
 
     private static getHTMLReportContent(logContent: string): string
     {
-        const libraryName = core.getInput("library-name");
-        const tagName = core.getInput("tag-name");
-        const configurationName = core.getInput("configuration-name");
+        const libraryName = ActionInput.getLibraryName();
+        const tagName = ActionInput.getTagName();
+        const configurationName = ActionInput.getConfigurationName();
 
         let logContentHTML = "";
         const logContentLines = logContent.split(/\r\n|\n|\r/);
