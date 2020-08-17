@@ -29,9 +29,5 @@ inputs:
     required: true
 
 runs:
-  using: 'composite'
-  steps:
-    - run: npm install
-      shell: bash
-    - run: npm run all
-      shell: bash
+  - using: 'node12'
+  - main: 'lib/src/main.js'
