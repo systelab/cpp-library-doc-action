@@ -33,7 +33,10 @@
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "npm",
             "runtimeArgs": ["run-script", "test-pdf"],
-            "outFiles": ["${workspaceFolder}/lib/**/*.js"]
+            "outFiles": ["${workspaceFolder}/lib/**/*.js"],
+            "console": "internalConsole",
+            "internalConsoleOptions": "neverOpen",
+            "outputCapture": "std"
         }
     ]
 }
