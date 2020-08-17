@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as path from "path";
 import * as puppeteer from "puppeteer";
 
 
@@ -19,10 +20,7 @@ export class PDFReport
         await page.setViewport({width: 1440, height: 900, deviceScaleFactor: 2});
         await page.setContent(contentHTML);
 
-        if (!fs.existsSync(pdfFilepath))
-        {
-            fs.mkdirSync(pdfFilepath, { recursive: true });
-        }
+        this.prepareOutputFolder(pdfFilepath);
 
         await page.pdf({ path: pdfFilepath,
                          displayHeaderFooter: true,
@@ -70,5 +68,14 @@ export class PDFReport
         const monthName = monthNames[monthIndex];
 
         return `${day}-${monthName}-${year}`;
+    }
+
+    private static prepareOutputFolder(pdfFilepath: string)
+    {
+        const pdfFolderpath = path.dirname(pdfFilepath);
+        if (!fs.existsSync(pdfFolderpath))
+        {
+            fs.mkdirSync(pdfFolderpath, { recursive: true });
+        }
     }
 }
