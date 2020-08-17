@@ -1,4 +1,4 @@
-FROM node:12
+FROM buildkite/puppeteer:5.2.1
 
 # Copy action repository sources into container
 COPY . .
