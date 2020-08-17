@@ -1,7 +1,7 @@
 FROM node:12
 
-# Copy action repository sources into container
-COPY . .
+# Move to workspace folder
+WORKDIR $GITHUB_WORKSPACE
 
 # Install 3rd party dependencies
 RUN npm install
@@ -10,5 +10,5 @@ RUN npm install
 RUN npm run build
 
 # Configure image entrypoint
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+RUN chmod +x ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
