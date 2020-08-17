@@ -5,8 +5,8 @@
   "main": "lib/src/main.js",
   "scripts": {
     "build": "tsc --sourceMap",
-    "package": "ncc build --source-map",
-    "all": "npm run build && npm run package",
+    "execute": "node lib/src/main.js",
+    "all": "npm run build && npm run execute",
     "test-pdf": "npm run build && node lib/test/pdf-report-test.js"
   },
   "repository": {
