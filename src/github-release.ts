@@ -40,7 +40,42 @@ export class GitHubRelease
             name: path.basename(filepath),
             data: fs.readFileSync(filepath)
         });
-        console.log("Asset uploaded successfully ");
+        console.log("Asset uploaded successfully.");
         console.log("");
     }
+
+    public static async downloadAsset(assetId: number): Promise<void>
+    {
+        const repoOwner = ActionInput.getRepositoryOwner();
+        const repoName = ActionInput.getRepositoryName();
+
+        console.log(`Downloading asset ${assetId} from GitHub Release...`);
+        const token: string = process.env.GITHUB_TOKEN as string;
+        const client = GitHub.getOctokit(token);
+        const downloadAssetResponse = await client.repos.getReleaseAsset({
+            owner: repoOwner,
+            repo: repoName,
+            asset_id: assetId
+        });
+        console.log("Asset downloaded successfully.");
+        console.log("");
+    }
+
+    public static async deleteAsset(assetId: number): Promise<void>
+    {
+        const repoOwner = ActionInput.getRepositoryOwner();
+        const repoName = ActionInput.getRepositoryName();
+
+        console.log(`Deleting asset ${assetId} from GitHub Release...`);
+        const token: string = process.env.GITHUB_TOKEN as string;
+        const client = GitHub.getOctokit(token);
+        const deleteAssetResponse = await client.repos.deleteReleaseAsset({
+            owner: repoOwner,
+            repo: repoName,
+            asset_id: assetId
+        });
+        console.log("Asset deleted successfully.");
+        console.log("");
+    }
+
 }
