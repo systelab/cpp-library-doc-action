@@ -12,7 +12,7 @@ describe("ChangelogReporter", () =>
                 owner: "systelab",
                 slug: "cpp-json-settings",
                 name: "C++ JSON Settings Library",
-                url: "https://github.com/systelab/cpp-json-settings"
+                url: "https://github.com/systelab/cpp-json-settings.git"
             },
             tag: "v1.3.4",
             configuration: "",
