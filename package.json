@@ -26,6 +26,7 @@
     "@types/puppeteer": "3.0.1",
     "axios": "0.19.2",
     "colors": "1.4.0",
+    "gitlog": "^4.0.3",
     "mocha": "6.2.2",
     "puppeteer": "5.2.1",
     "simple-git": "2.21.0",
