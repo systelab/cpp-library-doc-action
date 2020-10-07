@@ -1,0 +1,11 @@
+{
+    "diff": true,
+    "color": true,
+    "full-trace": true,
+    "extension": ["ts"],
+    "package": "./package.json",
+    "reporter": "spec",
+    "slow": 10000,
+    "timeout": 600000,
+    "ui": "bdd"
+}

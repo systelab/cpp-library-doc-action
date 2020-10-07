@@ -4,28 +4,32 @@
   "description": "GitHub action to generate documentation for a C++ library",
   "main": "lib/src/main.js",
   "scripts": {
-    "build": "tsc --sourceMap",
-    "action": "npm run build && node lib/src/main.js",
-    "test-pdf": "npm run build && node lib/test/pdf-report-test.js"
+    "github-action": "./node_modules/.bin/mocha -r ts-node/register -r tsconfig-paths/register --spec src/main.ts --config .mocharc.json",
+    "test": "./node_modules/.bin/mocha -r ts-node/register -r tsconfig-paths/register --spec test/*.ts --config .mocharc.json"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/systelab/cpp-library-doc-action.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "CSW",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/systelab/cpp-library-doc-action/issues"
   },
   "homepage": "https://github.com/systelab/cpp-library-doc-action#readme",
   "dependencies": {
-    "@types/node": "14.0.25",
-    "@types/puppeteer": "3.0.1",
     "@actions/core": "1.2.4",
     "@actions/github": "4.0.0",
+    "@types/mocha": "5.2.7",
+    "@types/node": "14.0.25",
+    "@types/puppeteer": "3.0.1",
     "axios": "0.19.2",
+    "colors": "1.4.0",
+    "mocha": "6.2.2",
     "puppeteer": "5.2.1",
+    "ts-node": "8.5.2",
+    "tsconfig-paths": "3.9.0",
     "typescript": "3.9.7"
   },
   "devDependencies": {

@@ -1,30 +1,28 @@
-import * as core from "@actions/core";
-
-import { ActionInput } from "./action-input";
-import { LogReporter } from "./log-reporter";
-import { GitHubRelease } from "./github-release";
+import { ReleaseBuild } from "@model";
+import { BuildlogReporter } from "@reporters";
+import { GitHubAction, GitHubRelease } from "@tools";
 
 
-(async () =>
+describe("Automated documentation GitHub action", () =>
 {
+    let build: ReleaseBuild;
+    let buildlogReportFilepath: string;
 
-    try
+    before(async () =>
     {
-        const libraryName = ActionInput.getLibraryName();
-        const tagName = ActionInput.getTagName();
-        const configurationName = ActionInput.getConfigurationName();
-        const ciSystem = ActionInput.getCISystem();
-        const jobId = ActionInput.getJobId();
-
-        console.log(`Generating documentation for ${libraryName} ${tagName} - ${configurationName} (${ciSystem}/${jobId})`);
+        build = GitHubAction.getCurrentReleaseBuild();
+        console.log(`Generating documentation for ${build.repository.name} ${build.tag} - ` +
+                    `${build.configuration} (${build.ciSystem}/${build.jobId})`);
         console.log("");
+    });
 
-        const logReportFilepath: string = await LogReporter.buildLogReportFile();
-        await GitHubRelease.uploadAsset(logReportFilepath);
-    }
-    catch (error)
+    it("Generate build log report PDF", async () =>
     {
-        core.setFailed(error.message);
-    }
+        buildlogReportFilepath = await BuildlogReporter.generateBuildlogReportFile(build);
+    });
 
-})();
+    it("Upload build log report as a GitHub release asset", async () =>
+    {
+        await GitHubRelease.uploadAsset(build, buildlogReportFilepath);
+    });
+});

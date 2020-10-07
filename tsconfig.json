@@ -1,10 +1,14 @@
 {
     "compilerOptions": {
+      "baseUrl": ".",
       "module": "commonjs",
       "lib": ["es2015", "dom"],
-      "types": ["node"],
-      "outDir": "./lib",
-      "rootDir": "."
+      "types": ["node", "mocha"],
+      "paths": {
+          "@model": ["src/model/index.ts"],
+          "@reporters": ["src/reporters/index.ts"],
+          "@tools": ["src/tools/index.ts"]
+      }
     },
     "exclude": ["node_modules"]
 }

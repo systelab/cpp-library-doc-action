@@ -3,7 +3,7 @@ import * as path from "path";
 import * as puppeteer from "puppeteer";
 
 
-export class PDFReport
+export class PDFReporter
 {
     public static async generate(title: string, content: string, pdfFilepath: string): Promise<void>
     {
@@ -45,12 +45,12 @@ export class PDFReport
 
     private static getReportHeadHTML(): string
     {
-        return fs.readFileSync("src/templates/report-head.html").toString();
+        return fs.readFileSync("src/reporters/templates/report-head.html").toString();
     }
 
     private static getPageHeaderHTML(title: string): string
     {
-        let pageHeaderHTML = fs.readFileSync("src/templates/page-header.html").toString();
+        let pageHeaderHTML = fs.readFileSync("src/reporters/templates/page-header.html").toString();
         pageHeaderHTML = pageHeaderHTML.replace("$$TITLE$$", title);
         pageHeaderHTML = pageHeaderHTML.replace("$$DATE$$", this.getCurrrentDate());
 
@@ -59,7 +59,7 @@ export class PDFReport
 
     private static getPageFooterHTML(): string
     {
-        return fs.readFileSync("src/templates/page-footer.html").toString();
+        return fs.readFileSync("src/reporters/templates/page-footer.html").toString();
     }
 
     private static getCurrrentDate(): string

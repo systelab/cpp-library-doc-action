@@ -2,4 +2,4 @@
 
 echo "Running entrypoint.sh"
 cd /
-npm run action
+npm run github-action
