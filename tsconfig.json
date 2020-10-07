@@ -7,7 +7,8 @@
       "paths": {
           "@model": ["src/model/index.ts"],
           "@reporters": ["src/reporters/index.ts"],
-          "@tools": ["src/tools/index.ts"]
+          "@tools": ["src/tools/index.ts"],
+          "@utils": ["src/utils/index.ts"]
       }
     },
     "exclude": ["node_modules"]
