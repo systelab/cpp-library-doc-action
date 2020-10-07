@@ -1,6 +1,6 @@
 import simpleGit, { SimpleGit } from "simple-git";
 
-import { ReleaseBuild, Repository } from "@model";
+import { Repository } from "@model";
 import { FilesystemUtility } from "@utils";
 import { PDFReporter } from "./pdf.reporter";
 
@@ -9,13 +9,13 @@ export class ChangelogReporter
 {
     static gitClient: SimpleGit = simpleGit();
 
-    public static async generateChangelogReportFile(build: ReleaseBuild): Promise<string>
+    public static async generateChangelogReportFile(repository: Repository, tag: string): Promise<string>
     {
-        await this.cloneRepository(build.repository);
+        await this.cloneRepository(repository);
 
-        const reportTitle = this.getReportTitle(build);
-        const reportFilename =  this.getReportFilepath(build);
-        const htmlReportContent = await this.getHTMLReportContent(build);
+        const reportTitle = this.getReportTitle(repository, tag);
+        const reportFilename =  this.getReportFilepath(repository, tag);
+        const htmlReportContent = await this.getHTMLReportContent(repository, tag);
 
         await PDFReporter.generate(reportTitle, htmlReportContent, reportFilename);
 
@@ -39,17 +39,17 @@ export class ChangelogReporter
         return `./workspace/${repository.slug}`;
     }
 
-    private static getReportTitle(build: ReleaseBuild): string
+    private static getReportTitle(repository: Repository, tag: string): string
     {
-        return `${build.repository.name} change log report for version ${build.tag}`;
+        return `${repository.name} change log report for version ${tag}`;
     }
 
-    private static getReportFilepath(build: ReleaseBuild): string
+    private static getReportFilepath(repository: Repository, tag: string): string
     {
-        return `report/${build.repository.slug}-${build.tag}-Changelog.pdf`;
+        return `report/${repository.slug}-${tag}-Changelog.pdf`;
     }
 
-    private static async getHTMLReportContent(build: ReleaseBuild): Promise<string>
+    private static async getHTMLReportContent(repository: Repository, tag: string): Promise<string>
     {
         // const options: GitlogOptions = {
         //     repo: ActionInput.getRepositoryName(),
