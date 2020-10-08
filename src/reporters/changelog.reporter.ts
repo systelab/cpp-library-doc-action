@@ -107,7 +107,7 @@ export class ChangelogReporter
 
     private static async getHTMLReportTagSection(sectionId: number, repository: Repository, tag: string, baseTag: string): Promise<string>
     {
-        let content = `<h1>${sectionId} Changes for ${tag}</h1>`;
+        let content = `<h1>${sectionId} Changes for version ${tag.substr(1)}</h1>`;
 
         const logOptions = {
             repo: this.getRepositoryLocalPath(repository),
