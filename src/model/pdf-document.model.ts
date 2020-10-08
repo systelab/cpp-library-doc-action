@@ -5,7 +5,7 @@ export interface PDFDocument
     title: string;
     content: string;
     date: string;
-    documentId?: number;
+    documentId?: string;
     version?: string;
     status?: string;
 }
