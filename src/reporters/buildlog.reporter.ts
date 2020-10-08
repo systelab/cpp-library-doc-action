@@ -1,20 +1,30 @@
-import { ContinuousIntegrationSystem, ReleaseBuild } from "@model";
+import { ContinuousIntegrationSystem, PDFDocument, ReleaseBuild } from "@model";
 import { AppVeyor, Travis } from "@tools";
+import { DateUtility } from "@utils";
+
 import { PDFReporter } from "./pdf.reporter";
 
 
 export class BuildlogReporter
 {
-    public static async generateBuildlogReportFile(build: ReleaseBuild): Promise<string>
+    public static async generateBuildlogReportFile(build: ReleaseBuild): Promise<PDFDocument>
     {
+        const reportFilepath =  this.getLogReportFilepath(build);
         const reportTitle = this.getReportTitle(build);
+        const reportDate = DateUtility.getCurrrentDateForHeader();
+
         const logContent: string = await this.getJobLog(build);
-        const reportFilename =  this.getLogReportFilepath(build);
         const htmlReportContent = this.getHTMLReportContent(build, logContent);
 
-        await PDFReporter.generate(reportTitle, htmlReportContent, reportFilename);
+        const pdfDocument: PDFDocument = {
+            filepath: reportFilepath,
+            title: reportTitle,
+            date: reportDate,
+            content: htmlReportContent,
+        };
+        await PDFReporter.generate(pdfDocument);
 
-        return reportFilename;
+        return pdfDocument;
     }
 
     private static getReportTitle(build: ReleaseBuild): string
@@ -52,38 +62,9 @@ export class BuildlogReporter
         }
 
         return `<h1>1 Introduction</h1>` +
-               `<p class="last">${build.repository.name} version ${build.tag} was built on ${this.getCurrrentDate()} for ` +
+               `<p class="last">${build.repository.name} version ${build.tag} was built on ${DateUtility.getCurrrentDateForContent()} for ` +
                `the "${build.configuration}" configuration.</p>` +
                `<h1>2 Log</h1>` +
                `<div>${logContentHTML}</div>`;
-    }
-
-    private static getCurrrentDate(): string
-    {
-        const today = new Date();
-        const day = today.getDate();
-        const monthIndex = today.getMonth();
-        const year = today.getFullYear();
-
-        let daySuffix: string;
-        switch (day % 10)
-        {
-            case 1:
-                daySuffix = "st";
-                break;
-            case 2:
-                daySuffix = "nd";
-                break;
-            case 3:
-                daySuffix = "rd";
-                break;
-            default:
-                daySuffix = "th";
-        }
-
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        const monthName = monthNames[monthIndex];
-
-        return `${monthName} ${day}${daySuffix}, ${year}`;
     }
 }
