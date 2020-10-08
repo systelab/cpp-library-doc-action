@@ -22,6 +22,11 @@ export class FilesystemUtility
         }
     }
 
+    public static createFolder(folderPath: string): void
+    {
+        fs.mkdirSync(folderPath, { recursive: true });
+    }
+
     public static deleteFolder(folderPath: string): void
     {
         if (this.exists(folderPath))
