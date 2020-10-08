@@ -4,9 +4,34 @@ import * as path from "path";
 
 export class FilesystemUtility
 {
-    public static readFile(filePath: string, encoding = null): string
+    public static getFolderPath(filepath: string): string
     {
-        return fs.readFileSync(filePath, encoding).toString();
+        return path.dirname(filepath);
+    }
+
+    public static getFilename(filepath: string): string
+    {
+        return path.basename(filepath);
+    }
+
+    public static getAbsolutePath(relativePath: string): string
+    {
+        return path.resolve(relativePath);
+    }
+
+    public static exists(filesystemPath: string): boolean
+    {
+        return fs.existsSync(filesystemPath);
+    }
+
+    public static readFile(filepath: string, encoding = null): string
+    {
+        return fs.readFileSync(filepath, encoding).toString();
+    }
+
+    public static readFileBuffer(filePath: string, encoding = null): Buffer
+    {
+        return fs.readFileSync(filePath, encoding);
     }
 
     public static readFileLines(filepath: string): string[]
@@ -14,7 +39,7 @@ export class FilesystemUtility
         try
         {
             const data: string = this.readFile(filepath, "UTF-8");
-            return data.split(/\r?\n/);
+            return data.split(/\r\n|\n|\r/);
         }
         catch (Exception)
         {
@@ -76,15 +101,5 @@ export class FilesystemUtility
     public static deleteFile(filepath: string): void
     {
         fs.unlinkSync(filepath);
-    }
-
-    public static exists(filesystemPath: string): boolean
-    {
-        return fs.existsSync(filesystemPath);
-    }
-
-    public static getAbsolutePath(relativePath: string): string
-    {
-        return path.resolve(relativePath);
     }
 }
