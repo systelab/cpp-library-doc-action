@@ -33,4 +33,18 @@ describe("ChangelogReporter", () =>
         await ChangelogReporter.generateChangelogReportFile(repository, tag, baseTag);
     });
 
+    it("Generate a PDF with the change log report of 'https://bitbucket.org/Systelab/cpp-signature-verification' repository " +
+       "for version 'v1.0.1' since repository creation", async () =>
+    {
+        const repository: Repository = {
+            type: RepositoryType.Bitbucket,
+            owner: "Systelab",
+            slug: "cpp-signature-verification",
+            name: "C++ Signature Verification Library",
+            url: "https://bitbucket.org/Systelab/cpp-signature-verification.git"
+        };
+        const tag = "v1.0.1";
+        await ChangelogReporter.generateChangelogReportFile(repository, tag);
+    });
+
 });
