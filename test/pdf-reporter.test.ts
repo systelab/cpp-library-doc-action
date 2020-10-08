@@ -30,7 +30,19 @@ describe("PDFReporter", () =>
             date: DateUtility.getCurrrentDateForHeader(),
             content: reportContent
         };
+        await PDFReporter.generate(pdfDocument);
+    });
 
+    it("Generate a PDF report with document ID and status", async () =>
+    {
+        const pdfDocument: PDFDocument = {
+            filepath: "report/pdf-reporter-test-header-fields.pdf",
+            title: "Test of PDF with document ID and status",
+            date: DateUtility.getCurrrentDateForHeader(),
+            documentId: "SLT-NWT-MMRP-033",
+            status: "Approved",
+            content: reportContent
+        };
         await PDFReporter.generate(pdfDocument);
     });
 
