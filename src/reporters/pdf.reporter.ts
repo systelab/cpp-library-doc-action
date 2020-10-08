@@ -1,20 +1,21 @@
-import * as fs from "fs";
-import * as path from "path";
 import * as puppeteer from "puppeteer";
+
+import { PDFDocument } from "@model";
+import { FilesystemUtility } from "@utils";
 
 
 export class PDFReporter
 {
-    public static async generate(title: string, content: string, pdfFilepath: string): Promise<void>
+    public static async generate(document: PDFDocument): Promise<void>
     {
-        console.log(`Generating PDF report on '${pdfFilepath}'...`);
+        console.log(`Generating PDF report on '${document.filepath}'...`);
 
         const headHTML = this.getReportHeadHTML();
-        const pageHeaderHTML = this.getPageHeaderHTML(title);
+        const pageHeaderHTML = this.getPageHeaderHTML(document);
         const pageFooterHTML = this.getPageFooterHTML();
         const contentHTML = `<html>
                                 <head>${headHTML}</head>
-                                <body>${content}</body>
+                                <body>${document.content}</body>
                              </html>`;
 
         const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"] });
@@ -22,9 +23,9 @@ export class PDFReporter
         await page.setViewport({width: 1440, height: 900, deviceScaleFactor: 2});
         await page.setContent(contentHTML);
 
-        this.prepareOutputFolder(pdfFilepath);
+        this.prepareOutputFolder(document.filepath);
 
-        await page.pdf({ path: pdfFilepath,
+        await page.pdf({ path: document.filepath,
                          displayHeaderFooter: true,
                          headerTemplate: pageHeaderHTML,
                          footerTemplate: pageFooterHTML,
@@ -45,42 +46,29 @@ export class PDFReporter
 
     private static getReportHeadHTML(): string
     {
-        return fs.readFileSync("src/reporters/templates/report-head.html").toString();
+        return FilesystemUtility.readFile("src/reporters/templates/report-head.html");
     }
 
-    private static getPageHeaderHTML(title: string): string
+    private static getPageHeaderHTML(document: PDFDocument): string
     {
-        let pageHeaderHTML = fs.readFileSync("src/reporters/templates/page-header.html").toString();
-        pageHeaderHTML = pageHeaderHTML.replace("$$TITLE$$", title);
-        pageHeaderHTML = pageHeaderHTML.replace("$$DATE$$", this.getCurrrentDate());
+        let pageHeaderHTML = FilesystemUtility.readFile("src/reporters/templates/page-header.html");
+        pageHeaderHTML = pageHeaderHTML.replace("$$TITLE$$", document.title);
+        pageHeaderHTML = pageHeaderHTML.replace("$$DATE$$", document.date);
 
         return pageHeaderHTML;
     }
 
     private static getPageFooterHTML(): string
     {
-        return fs.readFileSync("src/reporters/templates/page-footer.html").toString();
-    }
-
-    private static getCurrrentDate(): string
-    {
-        const today = new Date();
-        const day = String(today.getDate()).padStart(2, "0");
-        const monthIndex = today.getMonth();
-        const year = today.getFullYear();
-
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const monthName = monthNames[monthIndex];
-
-        return `${day}-${monthName}-${year}`;
+        return FilesystemUtility.readFile("src/reporters/templates/page-footer.html");
     }
 
     private static prepareOutputFolder(pdfFilepath: string)
     {
-        const pdfFolderpath = path.dirname(pdfFilepath);
-        if (!fs.existsSync(pdfFolderpath))
+        const pdfFolderpath = FilesystemUtility.getFolderPath(pdfFilepath);
+        if (!FilesystemUtility.exists(pdfFolderpath))
         {
-            fs.mkdirSync(pdfFolderpath, { recursive: true });
+            FilesystemUtility.createFolder(pdfFolderpath);
         }
     }
 }
