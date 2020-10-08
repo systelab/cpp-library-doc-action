@@ -1,6 +1,4 @@
-import { ContinuousIntegrationSystem } from "../model/ci-system.model";
-import { ReleaseBuild } from "../model/release-build.model";
-import { Repository, RepositoryType } from "../model/repository.model";
+import { ContinuousIntegrationSystem, Repository, RepositoryType, ReleaseBuild } from "@model";
 
 
 export class GitHubAction
