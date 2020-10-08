@@ -1,9 +1,7 @@
 import * as GitHub from "@actions/github";
-import * as fs from "fs";
-import * as path from "path";
 
-import { ReleaseBuild } from "../model/release-build.model";
-import { Repository } from "../model/repository.model";
+import { ReleaseBuild, Repository } from "@model";
+import { FilesystemUtility } from "@utils";
 
 
 export class GitHubRelease
@@ -29,13 +27,13 @@ export class GitHubRelease
             console.log("");
         }
 
-        console.log(`Uploading '${path.basename(filepath)}' asset to GitHub Release...`);
+        console.log(`Uploading '${FilesystemUtility.getFilename(filepath)}' asset to GitHub Release...`);
         const uploadAssetResponse = await client.repos.uploadReleaseAsset({
             owner: build.repository.owner,
             repo: build.repository.slug,
             release_id: this.releaseInternalId,
-            name: path.basename(filepath),
-            data: fs.readFileSync(filepath)
+            name: FilesystemUtility.getFilename(filepath),
+            data: FilesystemUtility.readFileBuffer(filepath)
         });
         console.log("Asset uploaded successfully.");
         console.log("");
@@ -68,5 +66,4 @@ export class GitHubRelease
         console.log("Asset deleted successfully.");
         console.log("");
     }
-
 }
