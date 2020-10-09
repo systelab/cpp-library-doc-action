@@ -1,7 +1,7 @@
 import simpleGit, { SimpleGit } from "simple-git";
 import gitlog, { GitlogOptions } from "gitlog";
 
-import { PDFDocument, Repository } from "@model";
+import { Changelog, PDFDocument, Repository } from "@model";
 import { DateUtility, FilesystemUtility } from "@utils";
 import { PDFReporter } from "./pdf.reporter";
 
@@ -10,20 +10,23 @@ export class ChangelogReporter
 {
     static gitClient: SimpleGit;
 
-    public static async generateChangelogReportFile(repository: Repository, tag: string, baseTag?: string): Promise<PDFDocument>
+    public static async generateChangelogReportFile(changelog: Changelog): Promise<PDFDocument>
     {
-        await this.cloneRepository(repository);
+        await this.cloneRepository(changelog.repository);
 
-        const reportFilepath =  this.getReportFilepath(repository, tag);
-        const reportTitle = this.getReportTitle(repository, tag);
+        const reportFilepath =  this.getReportFilepath(changelog.repository, changelog.tag);
+        const reportTitle = this.getReportTitle(changelog.repository, changelog.tag);
         const reportDate = DateUtility.getCurrrentDateForHeader();
 
-        const htmlReportContent = await this.getHTMLReportContent(repository, tag, baseTag);
+        const htmlReportContent = await this.getHTMLReportContent(changelog.repository, changelog.tag, changelog.baseTag);
 
         const pdfDocument: PDFDocument = {
             filepath: reportFilepath,
             title: reportTitle,
+            version: changelog.version,
+            status: changelog.status,
             date: reportDate,
+            code: changelog.code,
             content: htmlReportContent,
         };
         await PDFReporter.generate(pdfDocument);

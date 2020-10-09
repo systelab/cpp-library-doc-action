@@ -15,7 +15,7 @@ describe("ChangelogReporter", () =>
             url: "https://github.com/systelab/cpp-json-settings.git"
         };
         const tag = "v1.3.0";
-        await ChangelogReporter.generateChangelogReportFile(repository, tag);
+        await ChangelogReporter.generateChangelogReportFile({repository, tag});
     });
 
     it("Generate a PDF with the change log report of 'https://github.com/systelab/cpp-json-settings' repository " +
@@ -30,7 +30,7 @@ describe("ChangelogReporter", () =>
         };
         const tag = "v1.3.4";
         const baseTag = "v1.3.0";
-        await ChangelogReporter.generateChangelogReportFile(repository, tag, baseTag);
+        await ChangelogReporter.generateChangelogReportFile({repository, tag, baseTag});
     });
 
     it("Generate a PDF with the change log report of 'https://bitbucket.org/Systelab/cpp-signature-verification' repository " +
@@ -44,7 +44,7 @@ describe("ChangelogReporter", () =>
             url: "https://bitbucket.org/Systelab/cpp-signature-verification.git"
         };
         const tag = "v1.0.1";
-        await ChangelogReporter.generateChangelogReportFile(repository, tag);
+        await ChangelogReporter.generateChangelogReportFile({repository, tag, status: "Approved", code: "SLT-NWT-MMRP-033"});
     });
 
 });
