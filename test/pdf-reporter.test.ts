@@ -22,25 +22,37 @@ describe("PDFReporter", () =>
                         `<div>${logContentHTML}</div>`;
     });
 
-    it("Generate a PDF report with the minimum fields on header", async () =>
+    it("Generate a PDF report without fields on header", async () =>
     {
         const pdfDocument: PDFDocument = {
-            filepath: "report/pdf-reporter-test-minimum.pdf",
-            title: "Test of PDF with minimum fields on header",
-            date: DateUtility.getCurrrentDateForHeader(),
+            filepath: "report/pdf-reporter-no-fields.pdf",
+            title: "Test of PDF WITHOUT FIELDS on header",
             content: reportContent
         };
         await PDFReporter.generate(pdfDocument);
     });
 
-    it("Generate a PDF report with document ID and status", async () =>
+    it("Generate a PDF report with date and document code fields on header", async () =>
     {
         const pdfDocument: PDFDocument = {
-            filepath: "report/pdf-reporter-test-header-fields.pdf",
-            title: "Test of PDF with document ID and status",
+            filepath: "report/pdf-reporter-some-fields.pdf",
+            title: "Test of PDF with SOME FIELDS on header",
             date: DateUtility.getCurrrentDateForHeader(),
-            documentId: "SLT-NWT-MMRP-033",
-            status: "Approved",
+            code: "SLT-NWT-MMRP-033",
+            content: reportContent
+        };
+        await PDFReporter.generate(pdfDocument);
+    });
+
+    it("Generate a PDF report with all fields on header", async () =>
+    {
+        const pdfDocument: PDFDocument = {
+            filepath: "report/pdf-reporter-all-fields.pdf",
+            title: "Test of PDF with ALL FIELDS on header",
+            version: "2.1",
+            status: "Draft",
+            date: DateUtility.getCurrrentDateForHeader(),
+            code: "SLT-NWT-MMRP-033",
             content: reportContent
         };
         await PDFReporter.generate(pdfDocument);
