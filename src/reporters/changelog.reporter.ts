@@ -1,7 +1,7 @@
 import simpleGit, { SimpleGit } from "simple-git";
 import gitlog, { GitlogOptions } from "gitlog";
 
-import { Changelog, PDFDocument, Repository } from "@model";
+import { ChangelogReport, PDFDocument, Repository } from "@model";
 import { DateUtility, FilesystemUtility } from "@utils";
 import { PDFReporter } from "./pdf.reporter";
 
@@ -10,15 +10,15 @@ export class ChangelogReporter
 {
     static gitClient: SimpleGit;
 
-    public static async generateChangelogReportFile(changelog: Changelog): Promise<PDFDocument>
+    public static async generateReport(changelog: ChangelogReport): Promise<PDFDocument>
     {
         await this.cloneRepository(changelog.repository);
 
-        const reportFilepath =  this.getReportFilepath(changelog.repository, changelog.tag);
-        const reportTitle = this.getReportTitle(changelog.repository, changelog.tag);
+        const reportFilepath =  this.getReportFilepath(changelog);
+        const reportTitle = this.getReportTitle(changelog);
         const reportDate = DateUtility.getCurrrentDateForHeader();
 
-        const htmlReportContent = await this.getHTMLReportContent(changelog.repository, changelog.tag, changelog.baseTag);
+        const htmlReportContent = await this.getHTMLReportContent(changelog);
 
         const pdfDocument: PDFDocument = {
             filepath: reportFilepath,
@@ -60,40 +60,41 @@ export class ChangelogReporter
         return `workspace/${repository.slug}`;
     }
 
-    private static getReportTitle(repository: Repository, tag: string): string
+    private static getReportTitle(changelog: ChangelogReport): string
     {
-        return `${repository.name} change log report for version ${tag}`;
+        return `${changelog.repository.name} change log report for version ${changelog.tag}`;
     }
 
-    private static getReportFilepath(repository: Repository, tag: string): string
+    private static getReportFilepath(changelog: ChangelogReport): string
     {
-        return `report/${repository.slug}-${tag}-Changelog.pdf`;
+        return `report/${changelog.repository.slug}-${changelog.tag}-Changelog.pdf`;
     }
 
-    private static async getHTMLReportContent(repository: Repository, tag: string, baseTag: string): Promise<string>
+    private static async getHTMLReportContent(changelog: ChangelogReport): Promise<string>
     {
-        const changelogBase = baseTag ? `tag for version ${baseTag.substr(1)}` : "repository creation";
+        const changelogBase = changelog.baseTag ? `tag for version ${changelog.baseTag.substr(1)}` : "repository creation";
         let content = "<h1>1 Introduction</h1>" +
-                      `<p class="last">This report contains all commits for version ${tag.substr(1)} of ${repository.name} since ${changelogBase}.</p>`;
+                      "<p class=\"last\">This report contains all commits " +
+                      `for version ${changelog.tag.substr(1)} of ${changelog.repository.name} since ${changelogBase}.</p>`;
 
         let sectionId = 2;
-        const intermediateTags: string[] = await this.getIntermediateTags(tag, baseTag);
+        const intermediateTags: string[] = await this.getIntermediateTags(changelog);
         for (let tagIndex = 0; tagIndex < intermediateTags.length; tagIndex++)
         {
             const currentTag =  intermediateTags[tagIndex];
-            const previousTag = (tagIndex < intermediateTags.length - 1) ? intermediateTags[tagIndex + 1] : baseTag;
-            content += await this.getHTMLReportTagSection(sectionId, repository, currentTag, previousTag);
+            const previousTag = (tagIndex < intermediateTags.length - 1) ? intermediateTags[tagIndex + 1] : changelog.baseTag;
+            content += await this.getHTMLReportTagSection(sectionId, changelog.repository, currentTag, previousTag);
             sectionId++;
         }
 
         return content;
     }
 
-    private static async getIntermediateTags(tag: string, baseTag: string): Promise<string[]>
+    private static async getIntermediateTags(changelog: ChangelogReport): Promise<string[]>
     {
         const intermediateTags: string[] = [];
 
-        let insideTagsInterval = !baseTag;
+        let insideTagsInterval = !changelog.baseTag;
         const allTags = await this.gitClient.tags();
         for (let tagIndex = 0; tagIndex < allTags["all"].length; tagIndex++)
         {
@@ -103,11 +104,11 @@ export class ChangelogReporter
                 intermediateTags.push(currentTag);
             }
 
-            if (currentTag === baseTag)
+            if (currentTag === changelog.baseTag)
             {
                 insideTagsInterval = true;
             }
-            else if (currentTag === tag)
+            else if (currentTag === changelog.tag)
             {
                 insideTagsInterval = false;
             }
