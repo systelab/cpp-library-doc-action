@@ -1,5 +1,5 @@
 import { AutomatedTestReport, PDFDocument, TestSuiteResult } from "@model";
-import { DateUtility } from "@utils";
+import { DateUtility, TestResultUtility } from "@utils";
 
 import { PDFReporter } from "./pdf.reporter";
 
@@ -38,12 +38,13 @@ export class AutomatedTestReporter
 
     private static async loadTestResultFiles(report: AutomatedTestReport): Promise<TestSuiteResult[]>
     {
-        for (const testResultFile of report.xmlFiles)
+        const testSuiteResults: TestSuiteResult[] = [];
+        for (const xmlFilepath of report.xmlFiles)
         {
-            // TODO: parse XML
+            testSuiteResults.push(TestResultUtility.parseTestSuiteResult(xmlFilepath));
         }
 
-        return [];
+        return testSuiteResults;
     }
 
     private static getHTMLReportContent(report: AutomatedTestReport, results: TestSuiteResult[]): string
