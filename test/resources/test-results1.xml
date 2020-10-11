@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="16" failures="0" disabled="0" errors="0" time="0.032" timestamp="2020-09-07T09:38:23" name="AllTests">
+  <testsuite name="TraceFileContentTest" tests="4" failures="0" disabled="0" errors="0" time="0.007" timestamp="2020-09-07T09:38:23">
+    <testcase name="testAddTraceCreatesFile" status="run" result="completed" time="0.003" timestamp="2020-09-07T09:38:23" classname="TraceFileContentTest" />
+    <testcase name="testAddTraceWhenDisabledDoesNotWriteIntoFile" status="run" result="completed" time="0.001" timestamp="2020-09-07T09:38:23" classname="TraceFileContentTest" />
+    <testcase name="testAddTraceForOtherChannelsDoesNotWriteIntoFile" status="run" result="completed" time="0.002" timestamp="2020-09-07T09:38:23" classname="TraceFileContentTest" />
+    <testcase name="testAddTraceAppendsToExistingFile" status="run" result="completed" time="0.001" timestamp="2020-09-07T09:38:23" classname="TraceFileContentTest" />
+  </testsuite>
+  <testsuite name="TraceFileFieldsTest" tests="4" failures="0" disabled="0" errors="0" time="0.006" timestamp="2020-09-07T09:38:23">
+    <testcase name="testAddSeverityTraces" status="run" result="completed" time="0.001" timestamp="2020-09-07T09:38:23" classname="TraceFileFieldsTest" />
+    <testcase name="testAddTagTraces" status="run" result="completed" time="0.002" timestamp="2020-09-07T09:38:23" classname="TraceFileFieldsTest" />
+    <testcase name="testAddSeverityTagTraces" status="run" result="completed" time="0.001" timestamp="2020-09-07T09:38:23" classname="TraceFileFieldsTest" />
+    <testcase name="testAddMixedTraceTypes" status="run" result="completed" time="0.002" timestamp="2020-09-07T09:38:23" classname="TraceFileFieldsTest" />
+  </testsuite>
+  <testsuite name="TraceFileRotationTest" tests="2" failures="0" disabled="0" errors="0" time="0.008" timestamp="2020-09-07T09:38:23">
+    <testcase name="testBackupCreatesLogsFolder" status="run" result="completed" time="0.004" timestamp="2020-09-07T09:38:23" classname="TraceFileRotationTest" />
+    <testcase name="testBackupRemovesFoldersThatExceedMaxNumberOfArchiveFolders" status="run" result="completed" time="0.004" timestamp="2020-09-07T09:38:23" classname="TraceFileRotationTest" />
+  </testsuite>
+  <testsuite name="TraceMultipleChannelsTest" tests="2" failures="0" disabled="0" errors="0" time="0.004" timestamp="2020-09-07T09:38:23">
+    <testcase name="testAddTracesWritesTracesToProperChannel" status="run" result="completed" time="0.002" timestamp="2020-09-07T09:38:23" classname="TraceMultipleChannelsTest" />
+    <testcase name="testAddTraceWhenOneChannelDisabledOnlyWritesTracesOfOtherChannelIntoFile" status="run" result="completed" time="0.002" timestamp="2020-09-07T09:38:23" classname="TraceMultipleChannelsTest" />
+  </testsuite>
+  <testsuite name="TraceSeverityFilterTest" tests="4" failures="0" disabled="0" errors="0" time="0.007" timestamp="2020-09-07T09:38:23">
+    <testcase name="testOnlyErrorTracesAddedToFile" status="run" result="completed" time="0.002" timestamp="2020-09-07T09:38:23" classname="TraceSeverityFilterTest" />
+    <testcase name="testInfoAndErrorTracesAddedToFile" status="run" result="completed" time="0.002" timestamp="2020-09-07T09:38:23" classname="TraceSeverityFilterTest" />
+    <testcase name="testOnlyErrorTracesWithTagAddedToFile" status="run" result="completed" time="0.002" timestamp="2020-09-07T09:38:23" classname="TraceSeverityFilterTest" />
+    <testcase name="testTracesWithoutSeverityNotAddedToFile" status="run" result="completed" time="0.001" timestamp="2020-09-07T09:38:23" classname="TraceSeverityFilterTest" />
+  </testsuite>
+</testsuites>
