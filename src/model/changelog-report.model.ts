@@ -1,7 +1,7 @@
 import { Repository } from "./repository.model";
 
 
-export interface Changelog
+export interface ChangelogReport
 {
     version?: string;
     status?: string;
