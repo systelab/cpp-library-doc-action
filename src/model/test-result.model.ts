@@ -1,18 +1,19 @@
 
-export interface TestProjectResult
+export interface TestSuiteResult
 {
-    tests: TestResult[];
+    testCases: TestCaseResult[];
 }
 
-export enum TestResultStatus
+export enum TestCaseStatus
 {
     Passed = "passed",
     Failed = "failed",
     Disabled = "disabled"
 }
 
-export interface TestResult
+export interface TestCaseResult
 {
     name: string;
-    status: TestResultStatus;
+    status: TestCaseStatus;
+    time: number;
 }
