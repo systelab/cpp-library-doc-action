@@ -19,6 +19,11 @@ export class FilesystemUtility
         return path.resolve(relativePath);
     }
 
+    public static getJoinedPaths(...paths: string[]): string
+    {
+        return path.join(...paths);
+    }
+
     public static exists(filesystemPath: string): boolean
     {
         return fs.existsSync(filesystemPath);
