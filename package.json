@@ -4,7 +4,8 @@
   "description": "GitHub action to generate documentation for a C++ library",
   "main": "lib/src/main.js",
   "scripts": {
-    "github-action": "./node_modules/.bin/mocha -r ts-node/register -r tsconfig-paths/register --spec src/main.ts --config .mocharc.json",
+    "build-docs": "./node_modules/.bin/mocha -r ts-node/register -r tsconfig-paths/register --spec src/build-docs.ts --config .mocharc.json",
+    "github-action": "./node_modules/.bin/mocha -r ts-node/register -r tsconfig-paths/register --spec src/github-action.ts --config .mocharc.json",
     "test": "./node_modules/.bin/mocha -r ts-node/register -r tsconfig-paths/register --spec test/*.test.ts --config .mocharc.json"
   },
   "repository": {
