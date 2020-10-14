@@ -23,6 +23,5 @@ export class ConfigurationUtility
         console.log();
 
         return configuration;
-
     }
 }
