@@ -1,6 +1,6 @@
 import { Configuration, Repository } from "@model";
 import { ChangelogReporter } from "@reporters";
-import { ConfigurationUtility } from "@utils";
+import { ConfigurationUtility, WorkspaceUtility } from "@utils";
 
 
 describe("Generate Release Documents", () =>
@@ -15,8 +15,8 @@ describe("Generate Release Documents", () =>
             const tag: string = configuration.build.tag;
             const status: string = configuration.changeLogReport.status;
             const code: string = configuration.changeLogReport.code;
-            const filepath: string = configuration.changeLogReport.filepath;
-            await ChangelogReporter.generateReport({repository, filepath, tag, status, code});
+            const filepath: string = WorkspaceUtility.buildPath(configuration.changeLogReport.filepath);
+            await ChangelogReporter.generateReport({repository, tag, status, code, filepath});
         });
     }
 
