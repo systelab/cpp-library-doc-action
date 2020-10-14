@@ -34,6 +34,18 @@ export class ChangelogReporter
         return pdfDocument;
     }
 
+    private static getReportFilepath(changelog: ChangelogReport): string
+    {
+        if (changelog.filepath)
+        {
+            return changelog.filepath;
+        }
+        else
+        {
+            return `report/${changelog.repository.slug}-${changelog.tag}-Changelog.pdf`;
+        }
+    }
+
     private static async cloneRepository(repository: Repository): Promise<void>
     {
         const repoLocalPath = this.getRepositoryLocalPath(repository);
@@ -63,11 +75,6 @@ export class ChangelogReporter
     private static getReportTitle(changelog: ChangelogReport): string
     {
         return `${changelog.repository.name} change log report for version ${changelog.tag}`;
-    }
-
-    private static getReportFilepath(changelog: ChangelogReport): string
-    {
-        return `report/${changelog.repository.slug}-${changelog.tag}-Changelog.pdf`;
     }
 
     private static async getHTMLReportContent(changelog: ChangelogReport): Promise<string>
