@@ -1,8 +1,8 @@
 
 export enum RepositoryType
 {
-    GitHub,
-    Bitbucket
+    GitHub = "GitHub",
+    Bitbucket = "Bitbucket"
 }
 
 export interface Repository
