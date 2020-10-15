@@ -7,6 +7,12 @@ export class ConfigurationUtility
 {
     public static load(): Configuration
     {
+        if (!process.env.RELEASE_DOCUMENTATION_CI_CONFIG_FILE)
+        {
+            throw Error("Configuration file not defined.\n" +
+                        "Set 'RELEASE_DOCUMENTATION_CI_CONFIG_FILE' environment variable before executing this script.");
+        }
+
         const configurationFile = process.env.RELEASE_DOCUMENTATION_CI_CONFIG_FILE;
         const configurationFilepath = WorkspaceUtility.buildPath(configurationFile);
 
