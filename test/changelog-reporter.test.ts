@@ -33,6 +33,21 @@ describe("ChangelogReporter", () =>
         await ChangelogReporter.generateReport({repository, tag, baseTag});
     });
 
+    it("Generate a PDF with the change log report of 'https://github.com/systelab/cpp-trace-api' repository " +
+       "for HEAD since tag 'v1.0.0'", async () =>
+    {
+        const repository: Repository = {
+            type: RepositoryType.GitHub,
+            owner: "systelab",
+            slug: "cpp-trace-api",
+            name: "C++ Trace API Library",
+            url: "https://github.com/systelab/cpp-trace-api.git"
+        };
+        const tag = "HEAD";
+        const baseTag = "v1.0.0";
+        await ChangelogReporter.generateReport({repository, tag, baseTag});
+    });
+
     it("Generate a PDF with the change log report of 'https://bitbucket.org/Systelab/cpp-signature-verification' repository " +
        "for version 'v1.0.1' since repository creation", async () =>
     {
