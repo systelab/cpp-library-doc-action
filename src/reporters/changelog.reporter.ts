@@ -12,6 +12,7 @@ export class ChangelogReporter
 
     public static async generateReport(changelog: ChangelogReport): Promise<PDFDocument>
     {
+        await this.cleanRepository(changelog.repository);
         await this.cloneRepository(changelog.repository);
 
         const reportFilepath =  this.getReportFilepath(changelog);
@@ -31,6 +32,8 @@ export class ChangelogReporter
         };
         await PDFReporter.generate(pdfDocument);
 
+        await this.cleanRepository(changelog.repository);
+
         return pdfDocument;
     }
 
@@ -49,11 +52,7 @@ export class ChangelogReporter
     private static async cloneRepository(repository: Repository): Promise<void>
     {
         const repoLocalPath = this.getRepositoryLocalPath(repository);
-        console.log(`Deleting '${repoLocalPath}' folder contents...`);
-        FilesystemUtility.deleteFolder(repoLocalPath);
         FilesystemUtility.createFolder(repoLocalPath);
-        console.log("Contents of folder deleted successfully.");
-        console.log("");
 
         this.gitClient = simpleGit({
             baseDir: `${process.cwd()}/${repoLocalPath}`,
@@ -67,6 +66,15 @@ export class ChangelogReporter
         console.log("");
     }
 
+    private static async cleanRepository(repository: Repository): Promise<void>
+    {
+        const repoLocalPath = this.getRepositoryLocalPath(repository);
+        console.log(`Deleting '${repoLocalPath}' folder contents...`);
+        FilesystemUtility.deleteFolder(repoLocalPath);
+        console.log("Contents of folder deleted successfully.");
+        console.log("");
+    }
+
     private static getRepositoryLocalPath(repository: Repository): string
     {
         return `workspace/${repository.slug}`;
@@ -74,15 +82,16 @@ export class ChangelogReporter
 
     private static getReportTitle(changelog: ChangelogReport): string
     {
-        return `${changelog.repository.name} change log report for version ${changelog.tag}`;
+        return `${changelog.repository.name} change log report for ${this.getVersionName(changelog.tag)}`;
     }
 
     private static async getHTMLReportContent(changelog: ChangelogReport): Promise<string>
     {
-        const changelogBase = changelog.baseTag ? `tag for version ${changelog.baseTag.substr(1)}` : "repository creation";
+        const changelogBase = changelog.baseTag ? `tag for ${this.getVersionName(changelog.baseTag)}` : "creation";
         let content = "<h1>1 Introduction</h1>" +
                       "<p class=\"last\">This report contains all commits " +
-                      `for version ${changelog.tag.substr(1)} of ${changelog.repository.name} since ${changelogBase}.</p>`;
+                      `for ${this.getVersionName(changelog.tag)} of "${changelog.repository.name}" repository ` +
+                      `since ${changelogBase}.</p>`;
 
         let sectionId = 2;
         const intermediateTags: string[] = await this.getIntermediateTags(changelog);
@@ -121,12 +130,17 @@ export class ChangelogReporter
             }
         }
 
+        if (insideTagsInterval)
+        {
+            intermediateTags.push("HEAD");
+        }
+
         return intermediateTags.reverse();
     }
 
     private static async getHTMLReportTagSection(sectionId: number, repository: Repository, tag: string, baseTag: string): Promise<string>
     {
-        let content = `<h1>${sectionId} Changes for version ${tag.substr(1)}</h1>`;
+        let content = `<h1>${sectionId} Changes for ${this.getVersionName(tag)}</h1>`;
 
         const logOptions = {
             repo: this.getRepositoryLocalPath(repository),
@@ -157,6 +171,11 @@ export class ChangelogReporter
         {
             return tag;
         }
+    }
+
+    private static getVersionName(tag: string): string
+    {
+        return (tag === "HEAD") ? "HEAD" : `version ${tag.substr(1)}`;
     }
 
     private static getSanitizedHTML(data: string): string
