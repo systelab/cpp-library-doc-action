@@ -110,11 +110,13 @@ export class ChangelogReporter
     {
         const intermediateTags: string[] = [];
 
-        let insideTagsInterval = !changelog.baseTag;
         const allTags = await this.gitClient.tags();
-        for (let tagIndex = 0; tagIndex < allTags["all"].length; tagIndex++)
+        const allTagsSorted = allTags["all"].sort((tagA, tagB) => this.compareTags(tagA, tagB));
+
+        let insideTagsInterval = !changelog.baseTag;
+        for (let tagIndex = 0; tagIndex < allTagsSorted.length; tagIndex++)
         {
-            const currentTag = allTags["all"][tagIndex];
+            const currentTag = allTagsSorted[tagIndex];
             if (insideTagsInterval)
             {
                 intermediateTags.push(currentTag);
@@ -136,6 +138,48 @@ export class ChangelogReporter
         }
 
         return intermediateTags.reverse();
+    }
+
+    private static compareTags(tagA: string, tagB: string): number
+    {
+        const tagRegExp = /v\d+(.\d+)*/;
+        if (!tagRegExp.test(tagA) || !tagRegExp.test(tagB))
+        {
+            return tagA.localeCompare(tagB);
+        }
+
+        // -1 -> A < B
+        //  0 -> A == B
+        // +1 -> A > B
+        const itemsTagA: number[] = tagA.substr(1).split(".").map((value) => +value);
+        const itemsTagB: number[] = tagB.substr(1).split(".").map((value) => +value);
+        const minItemCount: number = (itemsTagA.length < itemsTagB.length) ? itemsTagA.length : itemsTagB.length;
+        for (let itemIndex = 0; itemIndex < minItemCount; itemIndex++)
+        {
+            const itemTagA: number = itemsTagA[itemIndex];
+            const itemTagB: number = itemsTagB[itemIndex];
+            if (itemTagA < itemTagB)
+            {
+                return -1;
+            }
+            else if (itemTagA > itemTagB)
+            {
+                return 1;
+            }
+        }
+
+        if (itemsTagA.length < itemsTagB.length)
+        {
+            return 1;
+        }
+        else if (itemsTagA.length > itemsTagB.length)
+        {
+            return -1;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     private static async getHTMLReportTagSection(sectionId: number, repository: Repository, tag: string, baseTag: string): Promise<string>
