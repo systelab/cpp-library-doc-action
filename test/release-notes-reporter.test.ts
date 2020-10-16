@@ -23,7 +23,7 @@ describe("ChangelogReporter", () =>
             type: RepositoryType.Bitbucket,
             owner: "Systelab",
             slug: "cpp-signature-verification",
-            name: "C++ Signature Verification Library",
+            name: "SignatureVerification CSW library",
             url: "https://bitbucket.org/Systelab/cpp-signature-verification.git"
         };
         const version = "1.0.1";
