@@ -109,6 +109,7 @@ export class ReleaseNotesReporter
     private static convertMarkdownToHTML(contentMarkdown: string): string
     {
         const converter = new showdown.Converter();
+        converter.setOption("noHeaderId", true);
         return converter.makeHtml(contentMarkdown);
     }
 }
