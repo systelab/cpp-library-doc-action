@@ -82,7 +82,7 @@ export class ReleaseNotesReporter
 
     private static getReportTitle(releaseNotes: ReleaseNotesReport): string
     {
-        return `Release notes for ${releaseNotes.repository.name} ${releaseNotes.version} version`;
+        return `Release notes for ${releaseNotes.repository.name} version ${releaseNotes.version}`;
     }
 
     private static getHTMLReportContent(releaseNotes: ReleaseNotesReport): string
