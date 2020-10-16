@@ -10,7 +10,7 @@ export class ReleaseNotesReporter
 {
     static gitClient: SimpleGit;
 
-    public static async generateBuildlogReportFile(releaseNotes: ReleaseNotesReport): Promise<PDFDocument>
+    public static async generateReport(releaseNotes: ReleaseNotesReport): Promise<PDFDocument>
     {
         await this.cleanRepository(releaseNotes.repository);
         await this.cloneRepository(releaseNotes.repository);
