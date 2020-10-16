@@ -2,7 +2,7 @@ import { Repository, RepositoryType } from "@model";
 import { ReleaseNotesReporter } from "@reporters";
 
 
-describe("ChangelogReporter", () =>
+describe("ReleaseNotesReporter", () =>
 {
     it("Generate a PDF with the release notes of 'JSONSettings CSW library' for 1.3.0 version", async () =>
     {

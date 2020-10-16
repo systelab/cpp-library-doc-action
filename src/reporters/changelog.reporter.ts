@@ -88,19 +88,17 @@ export class ChangelogReporter
     private static async getHTMLReportContent(changelog: ChangelogReport): Promise<string>
     {
         const changelogBase = changelog.baseTag ? `tag for ${this.getVersionName(changelog.baseTag)}` : "creation";
-        let content = "<h1>1 Introduction</h1>" +
+        let content = "<h1>Introduction</h1>" +
                       "<p class=\"last\">This report contains all commits " +
                       `for ${this.getVersionName(changelog.tag)} of "${changelog.repository.name}" repository ` +
                       `since ${changelogBase}.</p>`;
 
-        let sectionId = 2;
         const intermediateTags: string[] = await this.getIntermediateTags(changelog);
         for (let tagIndex = 0; tagIndex < intermediateTags.length; tagIndex++)
         {
             const currentTag =  intermediateTags[tagIndex];
             const previousTag = (tagIndex < intermediateTags.length - 1) ? intermediateTags[tagIndex + 1] : changelog.baseTag;
-            content += await this.getHTMLReportTagSection(sectionId, changelog.repository, currentTag, previousTag);
-            sectionId++;
+            content += await this.getHTMLReportTagSection(changelog.repository, currentTag, previousTag);
         }
 
         return content;
@@ -182,9 +180,9 @@ export class ChangelogReporter
         }
     }
 
-    private static async getHTMLReportTagSection(sectionId: number, repository: Repository, tag: string, baseTag: string): Promise<string>
+    private static async getHTMLReportTagSection(repository: Repository, tag: string, baseTag: string): Promise<string>
     {
-        let content = `<h1>${sectionId} Changes for ${this.getVersionName(tag)}</h1>`;
+        let content = `<h1>Changes for ${this.getVersionName(tag)}</h1>`;
 
         const logOptions = {
             repo: this.getRepositoryLocalPath(repository),
