@@ -50,7 +50,7 @@ export class AutomatedTestReporter
     private static getHTMLReportContent(report: AutomatedTestReport, results: TestSuiteResult[]): string
     {
         return `<h1>Introduction</h1>` +
-               `<p class="last">Automated tests for ${report.repository.name} version ${report.tag} were executed ` +
+               `<p>Automated tests for ${report.repository.name} version ${report.tag} were executed ` +
                `on ${DateUtility.getCurrrentDateForContent()} for the "${report.configuration}" configuration.</p>`;
 
         // TODO: add sections with details & results of all test suites

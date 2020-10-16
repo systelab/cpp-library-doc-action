@@ -89,7 +89,7 @@ export class ChangelogReporter
     {
         const changelogBase = changelog.baseTag ? `tag for ${this.getVersionName(changelog.baseTag)}` : "creation";
         let content = "<h1>Introduction</h1>" +
-                      "<p class=\"last\">This report contains all commits " +
+                      "<p>This report contains all commits " +
                       `for ${this.getVersionName(changelog.tag)} of "${changelog.repository.name}" repository ` +
                       `since ${changelogBase}.</p>`;
 

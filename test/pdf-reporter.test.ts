@@ -16,9 +16,9 @@ describe("PDFReporter", () =>
             logContentHTML += `<div class="log-line">${logLine}</div>`;
         }
 
-        reportContent = `<h1>1 Introduction</h1>` +
-                        `<p class="last">This is an example of introduction section for PDF reports</p>` +
-                        `<h1>2 Report</h1>` +
+        reportContent = `<h1>Introduction</h1>` +
+                        `<p>This is an example of introduction section for PDF reports</p>` +
+                        `<h1>Report</h1>` +
                         `<div>${logContentHTML}</div>`;
     });
 

@@ -62,7 +62,7 @@ export class BuildlogReporter
         }
 
         return `<h1>Introduction</h1>` +
-               `<p class="last">${build.repository.name} version ${build.tag} was built on ${DateUtility.getCurrrentDateForContent()} for ` +
+               `<p>${build.repository.name} version ${build.tag} was built on ${DateUtility.getCurrrentDateForContent()} for ` +
                `the "${build.configuration}" configuration.</p>` +
                `<h1>Log</h1>` +
                `<div>${logContentHTML}</div>`;
