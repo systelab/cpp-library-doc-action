@@ -1,4 +1,5 @@
 import simpleGit, { SimpleGit } from "simple-git";
+import * as showdown from "showdown";
 
 import { PDFDocument, ReleaseNotesReport, Repository } from "@model";
 import { DateUtility, FilesystemUtility } from "@utils";
@@ -87,12 +88,12 @@ export class ReleaseNotesReporter
 
     private static getHTMLReportContent(releaseNotes: ReleaseNotesReport): string
     {
-        const introductionHTML = `<h1>1 Introduction</h1>` +
-                                 `<p class="last">This document contains the release note for version ${releaseNotes.version} of ` +
+        const introductionHTML = `<h1>Introduction</h1>` +
+                                 `<p>This document contains the release note for version ${releaseNotes.version} of ` +
                                  `the ${releaseNotes.repository.name}.</p>`;
 
         const contentMarkdown: string = this.getMarkdownContent(releaseNotes);
-        const contentHTML: string = contentMarkdown; // TODO transform MD to HTML
+        const contentHTML: string = this.convertMarkdownToHTML(contentMarkdown);
 
         return `${introductionHTML} ${contentHTML}`;
     }
@@ -102,7 +103,12 @@ export class ReleaseNotesReporter
         const repoLocalPath = this.getRepositoryLocalPath(releaseNotes.repository);
         const markdownRelativePath = releaseNotes.markdownPath ? releaseNotes.markdownPath : "RELEASENOTES.md";
         const releaseNoteMarkdownFilepath = `${repoLocalPath}/${markdownRelativePath}`;
-
         return FilesystemUtility.readFile(releaseNoteMarkdownFilepath);
+    }
+
+    private static convertMarkdownToHTML(contentMarkdown: string): string
+    {
+        const converter = new showdown.Converter();
+        return converter.makeHtml(contentMarkdown);
     }
 }
