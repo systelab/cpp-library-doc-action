@@ -31,10 +31,13 @@ export class GitHubRelease
             repo: repository.slug,
             release_id: this.releaseInternalId
         });
+        const assetNames = listAssetsResponse.data.map((asset) => asset.name);
+
         console.log("Assets queried successfully.");
+        console.log("Asset names: ", assetNames);
         console.log("");
 
-        return listAssetsResponse.data.map((asset) => asset.name);
+        return assetNames;
     }
 
     public static async uploadAsset(repository: Repository, tag: string, filepath: string): Promise<void>
