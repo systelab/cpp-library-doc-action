@@ -8,10 +8,16 @@ export class GitHubRelease
 {
     private static releaseInternalId: number;
 
-    public static async existsAsset(repository: Repository, tag: string, name: string): Promise<boolean>
+    public static async existsAsset(repository: Repository, tag: string, filepath: string): Promise<boolean>
     {
+        const filename = FilesystemUtility.getFilename(filepath).replace(/ /g, ".");
+        console.log(`Checking if asset '${filename}' exists on GitHub Release...`);
+
         const assetNames: string[] = await this.getAssetNames(repository, tag);
-        const found = assetNames.find((assetName) => assetName === name);
+        const found = assetNames.find((assetName) => assetName === filename);
+        console.log(`Asset ${!!found ? "FOUND" : "NOT FOUND"} on release.`);
+        console.log("");
+
         return !!found;
     }
 
