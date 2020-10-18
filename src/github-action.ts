@@ -44,6 +44,11 @@ describe("Automated documentation GitHub action", () =>
         {
             await GitHubRelease.uploadAsset(build.repository, build.tag, releaseNotesFilepath);
         }
+        else
+        {
+            console.log("No need to upload release notes as they are already " +
+                        "uploaded by another configuration");
+        }
     });
 
     it("Generate changelog report PDF", async () =>
@@ -60,6 +65,11 @@ describe("Automated documentation GitHub action", () =>
         if (!await GitHubRelease.existsAsset(build.repository, build.tag, changeLogFilepath))
         {
             await GitHubRelease.uploadAsset(build.repository, build.tag, changeLogFilepath);
+        }
+        else
+        {
+            console.log("No need to upload changelog as they are already " +
+                        "uploaded by another configuration");
         }
     });
 
