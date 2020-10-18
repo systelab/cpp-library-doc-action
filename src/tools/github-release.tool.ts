@@ -10,10 +10,10 @@ export class GitHubRelease
 
     public static async existsAsset(repository: Repository, tag: string, filepath: string): Promise<boolean>
     {
+        const assetNames: string[] = await this.getAssetNames(repository, tag);
         const filename = FilesystemUtility.getFilename(filepath).replace(/ /g, ".");
         console.log(`Checking if asset '${filename}' exists on GitHub Release...`);
 
-        const assetNames: string[] = await this.getAssetNames(repository, tag);
         const found = assetNames.find((assetName) => assetName === filename);
         console.log(`Asset ${!!found ? "FOUND" : "NOT FOUND"} on release.`);
         console.log("");
