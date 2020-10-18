@@ -1,5 +1,5 @@
 import { PDFDocument, ReleaseBuild } from "@model";
-import { BuildlogReporter, ReleaseNotesReporter } from "@reporters";
+import { BuildlogReporter, ReleaseNotesReporter, ChangelogReporter } from "@reporters";
 import { GitHubAction, GitHubRelease } from "@tools";
 
 
@@ -8,6 +8,7 @@ describe("Automated documentation GitHub action", () =>
     let build: ReleaseBuild;
     let buildLogReportFilepath: string;
     let releaseNotesFilepath: string;
+    let changeLogFilepath: string;
 
     before(async () =>
     {
@@ -23,6 +24,11 @@ describe("Automated documentation GitHub action", () =>
         buildLogReportFilepath = pdfDocument.filepath;
     });
 
+    it("Upload build log as GitHub release asset", async () =>
+    {
+        await GitHubRelease.uploadAsset(build, buildLogReportFilepath);
+    });
+
     it("Generate release notes report PDF", async () =>
     {
         const pdfDocument: PDFDocument = await ReleaseNotesReporter.generateReport({
@@ -32,10 +38,29 @@ describe("Automated documentation GitHub action", () =>
         releaseNotesFilepath = pdfDocument.filepath;
     });
 
-    it("Upload reports as GitHub release assets", async () =>
+    it("Upload release notes as GitHub release asset", async () =>
     {
-        await GitHubRelease.uploadAsset(build, buildLogReportFilepath);
-        await GitHubRelease.uploadAsset(build, releaseNotesFilepath);
+        if (!await GitHubRelease.existsAsset(build, releaseNotesFilepath))
+        {
+            await GitHubRelease.uploadAsset(build, releaseNotesFilepath);
+        }
+    });
+
+    it("Generate changelog report PDF", async () =>
+    {
+        const pdfDocument: PDFDocument = await ChangelogReporter.generateReport({
+            repository: build.repository,
+            tag: build.tag
+        });
+        changeLogFilepath = pdfDocument.filepath;
+    });
+
+    it("Upload changelog as GitHub release asset", async () =>
+    {
+        if (!await GitHubRelease.existsAsset(build, changeLogFilepath))
+        {
+            await GitHubRelease.uploadAsset(build, changeLogFilepath);
+        }
     });
 
 });
