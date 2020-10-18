@@ -45,7 +45,10 @@
             "protocol": "inspector",
             "console": "internalConsole",
             "internalConsoleOptions": "neverOpen",
-            "outputCapture": "std"
+            "outputCapture": "std",
+            "env": {
+                "GITHUB_TOKEN": "PasteValidTokenHere"
+            }
         },
         {
             "type": "node",
