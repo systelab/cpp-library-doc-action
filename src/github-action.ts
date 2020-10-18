@@ -23,7 +23,7 @@ describe("Automated documentation GitHub action", () =>
         buildLogReportFilepath = pdfDocument.filepath;
     });
 
-    it("Generate relase notes report PDF", async () =>
+    it("Generate release notes report PDF", async () =>
     {
         const pdfDocument: PDFDocument = await ReleaseNotesReporter.generateReport({
             repository: build.repository,
