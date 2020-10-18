@@ -4,17 +4,43 @@ import { GitHubRelease } from "@tools";
 
 describe("GitHubRelease", () =>
 {
-    it("Query assets for release 'v1.0.1' of 'JSONSettings CSW library' repository", async () =>
+    it("Query assets for release 'v1.3.0' of 'TraceAPI CSW library' repository", async () =>
     {
         const repository: Repository = {
             type: RepositoryType.GitHub,
             owner: "systelab",
-            slug: "cpp-json-settings",
-            name: "JSONSettings CSW library",
-            url: "https://github.com/systelab/cpp-json-settings.git"
+            slug: "cpp-trace-api",
+            name: "TraceAPI CSW library",
+            url: "https://github.com/systelab/cpp-trace-api.git"
         };
-        const names = await GitHubRelease.getAssetNames(repository, "1.3.0");
+        const names = await GitHubRelease.getAssetNames(repository, "v1.3.0");
         console.log("Release assets:", names);
+    });
+
+    it("Check if asset 'TraceAPITest-724859523.xml' exists on release 'v1.3.0' of 'TraceAPI CSW library' repository", async () =>
+    {
+        const repository: Repository = {
+            type: RepositoryType.GitHub,
+            owner: "systelab",
+            slug: "cpp-trace-api",
+            name: "TraceAPI CSW library",
+            url: "https://github.com/systelab/cpp-trace-api.git"
+        };
+        const exists = await GitHubRelease.existsAsset(repository, "v1.3.0", "TraceAPITest-724859523.xml");
+        console.log("Asset 'TraceAPITest-724859523.xml' exists:", exists);
+    });
+
+    it("Check if asset 'NotExisting.xml' exists on release 'v1.3.0' of 'TraceAPI CSW library' repository", async () =>
+    {
+        const repository: Repository = {
+            type: RepositoryType.GitHub,
+            owner: "systelab",
+            slug: "cpp-trace-api",
+            name: "TraceAPI CSW library",
+            url: "https://github.com/systelab/cpp-trace-api.git"
+        };
+        const exists = await GitHubRelease.existsAsset(repository, "v1.3.0", "NotExisting.xml");
+        console.log("Asset 'NotExisting.xml' exists:", exists);
     });
 
 });
