@@ -27,7 +27,7 @@ describe("Automated documentation GitHub action", () =>
     {
         const pdfDocument: PDFDocument = await ReleaseNotesReporter.generateReport({
             repository: build.repository,
-            version: build.tag
+            version: build.tag.substr(1)
         });
         releaseNotesFilepath = pdfDocument.filepath;
     });
