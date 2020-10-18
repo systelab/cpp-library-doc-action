@@ -1,12 +1,13 @@
 import { PDFDocument, ReleaseBuild } from "@model";
-import { BuildlogReporter } from "@reporters";
+import { BuildlogReporter, ReleaseNotesReporter } from "@reporters";
 import { GitHubAction, GitHubRelease } from "@tools";
 
 
 describe("Automated documentation GitHub action", () =>
 {
     let build: ReleaseBuild;
-    let buildlogReportFilepath: string;
+    let buildLogReportFilepath: string;
+    let releaseNotesFilepath: string;
 
     before(async () =>
     {
@@ -19,11 +20,22 @@ describe("Automated documentation GitHub action", () =>
     it("Generate build log report PDF", async () =>
     {
         const pdfDocument: PDFDocument = await BuildlogReporter.generateBuildlogReportFile(build);
-        buildlogReportFilepath = pdfDocument.filepath;
+        buildLogReportFilepath = pdfDocument.filepath;
     });
 
-    it("Upload build log report as a GitHub release asset", async () =>
+    it("Generate relase notes report PDF", async () =>
     {
-        await GitHubRelease.uploadAsset(build, buildlogReportFilepath);
+        const pdfDocument: PDFDocument = await ReleaseNotesReporter.generateReport({
+            repository: build.repository,
+            version: build.tag
+        });
+        releaseNotesFilepath = pdfDocument.filepath;
     });
+
+    it("Upload reports as GitHub release assets", async () =>
+    {
+        await GitHubRelease.uploadAsset(build, buildLogReportFilepath);
+        await GitHubRelease.uploadAsset(build, releaseNotesFilepath);
+    });
+
 });
