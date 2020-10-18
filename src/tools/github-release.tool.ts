@@ -1,6 +1,6 @@
 import * as GitHub from "@actions/github";
 
-import { ReleaseBuild, Repository } from "@model";
+import { Repository } from "@model";
 import { FilesystemUtility } from "@utils";
 
 
@@ -8,27 +8,27 @@ export class GitHubRelease
 {
     private static releaseInternalId: number;
 
-    public static async existsAsset(build: ReleaseBuild, name: string): Promise<boolean>
+    public static async existsAsset(repository: Repository, tag: string, name: string): Promise<boolean>
     {
-        const assetNames: string[] = await this.getAssetNames(build);
+        const assetNames: string[] = await this.getAssetNames(repository, tag);
         const found = assetNames.find((assetName) => assetName === name);
         return !!found;
     }
 
-    public static async getAssetNames(build: ReleaseBuild): Promise<string[]>
+    public static async getAssetNames(repository: Repository, tag: string): Promise<string[]>
     {
         const token: string = process.env.GITHUB_TOKEN as string;
         const client = GitHub.getOctokit(token);
 
         if (!this.releaseInternalId)
         {
-            this.releaseInternalId = await this.getReleaseAssetId(client, build);
+            this.releaseInternalId = await this.getReleaseAssetId(client, repository, tag);
         }
 
         console.log(`Querying assets from GitHub Release...`);
         const listAssetsResponse = await client.repos.listReleaseAssets({
-            owner: build.repository.owner,
-            repo: build.repository.slug,
+            owner: repository.owner,
+            repo: repository.slug,
             release_id: this.releaseInternalId
         });
         console.log("Assets queried successfully.");
@@ -37,20 +37,20 @@ export class GitHubRelease
         return listAssetsResponse.data.map((asset) => asset.name);
     }
 
-    public static async uploadAsset(build: ReleaseBuild, filepath: string): Promise<void>
+    public static async uploadAsset(repository: Repository, tag: string, filepath: string): Promise<void>
     {
         const token: string = process.env.GITHUB_TOKEN as string;
         const client = GitHub.getOctokit(token);
 
         if (!this.releaseInternalId)
         {
-            this.releaseInternalId = await this.getReleaseAssetId(client, build);
+            this.releaseInternalId = await this.getReleaseAssetId(client, repository, tag);
         }
 
         console.log(`Uploading '${FilesystemUtility.getFilename(filepath)}' asset to GitHub Release...`);
         const uploadAssetResponse = await client.repos.uploadReleaseAsset({
-            owner: build.repository.owner,
-            repo: build.repository.slug,
+            owner: repository.owner,
+            repo: repository.slug,
             release_id: this.releaseInternalId,
             name: FilesystemUtility.getFilename(filepath),
             data: FilesystemUtility.readFileBuffer(filepath)
@@ -87,17 +87,17 @@ export class GitHubRelease
         console.log("");
     }
 
-    private static async getReleaseAssetId(client, build: ReleaseBuild): Promise<number>
+    private static async getReleaseAssetId(client, repository: Repository, tag: string): Promise<number>
     {
         console.log("Querying for GitHub Release internal identifier...");
         const releaseDataResponse = await client.repos.getReleaseByTag({
-            owner: build.repository.owner,
-            repo: build.repository.slug,
-            tag: build.tag
+            owner: repository.owner,
+            repo: repository.slug,
+            tag
         });
 
         const releaseInternalId = releaseDataResponse.data.id;
-        console.log(`Internal release identifer for '${build.repository.owner}/${build.repository.slug}@${build.tag}' ` +
+        console.log(`Internal release identifer for '${repository.owner}/${repository.slug}@${tag}' ` +
                     `is ${this.releaseInternalId}`);
         console.log("");
 

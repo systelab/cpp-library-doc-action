@@ -26,7 +26,7 @@ describe("Automated documentation GitHub action", () =>
 
     it("Upload build log as GitHub release asset", async () =>
     {
-        await GitHubRelease.uploadAsset(build, buildLogReportFilepath);
+        await GitHubRelease.uploadAsset(build.repository, build.tag, buildLogReportFilepath);
     });
 
     it("Generate release notes report PDF", async () =>
@@ -40,9 +40,9 @@ describe("Automated documentation GitHub action", () =>
 
     it("Upload release notes as GitHub release asset", async () =>
     {
-        if (!await GitHubRelease.existsAsset(build, releaseNotesFilepath))
+        if (!await GitHubRelease.existsAsset(build.repository, build.tag, releaseNotesFilepath))
         {
-            await GitHubRelease.uploadAsset(build, releaseNotesFilepath);
+            await GitHubRelease.uploadAsset(build.repository, build.tag, releaseNotesFilepath);
         }
     });
 
@@ -57,9 +57,9 @@ describe("Automated documentation GitHub action", () =>
 
     it("Upload changelog as GitHub release asset", async () =>
     {
-        if (!await GitHubRelease.existsAsset(build, changeLogFilepath))
+        if (!await GitHubRelease.existsAsset(build.repository, build.tag, changeLogFilepath))
         {
-            await GitHubRelease.uploadAsset(build, changeLogFilepath);
+            await GitHubRelease.uploadAsset(build.repository, build.tag, changeLogFilepath);
         }
     });
 
