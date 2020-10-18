@@ -5,8 +5,9 @@ export interface Configuration
 {
     build: ReleaseBuild;
     changeLogReport: ChangeLogReportConfiguration;
+    releaseNotesReport: ReleaseNotesConfiguration;
     buildLogReport: BuildLogReportConfiguration;
-    automatedTestExecutionLogReport: AutomatedTestExecutionLogReportConfiguration;
+    automatedTestExecutionLogReport: AutomatedTestExecutionLogConfiguration;
 }
 
 export interface ChangeLogReportConfiguration
@@ -24,9 +25,16 @@ export interface BuildLogReportConfiguration
     enabled: boolean;
 }
 
-export interface AutomatedTestExecutionLogReportConfiguration
+export interface ReleaseNotesConfiguration
+{
+    enabled: boolean;
+    code?: string;
+    version?: string;
+    status?: string;
+    filepath?: string;
+}
+
+export interface AutomatedTestExecutionLogConfiguration
 {
     enabled: boolean;
 }
-
-
