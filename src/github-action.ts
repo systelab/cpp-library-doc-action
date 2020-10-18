@@ -32,6 +32,7 @@ describe("Automated documentation GitHub action", () =>
     it("Generate release notes report PDF", async () =>
     {
         const pdfDocument: PDFDocument = await ReleaseNotesReporter.generateReport({
+            filepath: `report/${build.repository.name}-${build.tag}-ReleaseNotes.pdf`,
             repository: build.repository,
             version: build.tag.substr(1)
         });
@@ -54,6 +55,7 @@ describe("Automated documentation GitHub action", () =>
     it("Generate changelog report PDF", async () =>
     {
         const pdfDocument: PDFDocument = await ChangelogReporter.generateReport({
+            filepath: `report/${build.repository.name}-${build.tag}-ChangeLog.pdf`,
             repository: build.repository,
             tag: build.tag
         });
