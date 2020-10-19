@@ -1,5 +1,5 @@
 import { BuildlogReport, ContinuousIntegrationSystem, PDFDocument } from "@model";
-import { AppVeyor, Travis } from "@tools";
+import { AppVeyor, Jenkins, Travis } from "@tools";
 import { DateUtility } from "@utils";
 
 import { PDFReporter } from "./pdf.reporter";
@@ -73,6 +73,9 @@ export class BuildlogReporter
 
             case ContinuousIntegrationSystem.Travis:
                 return Travis.getJobLog(buildlog.jobId);
+
+            case ContinuousIntegrationSystem.Jenkins:
+                return Jenkins.getJobLog(buildlog.jobId);
 
             default:
                 throw Error("Unsupported continuous integration system");
