@@ -110,6 +110,7 @@ export class ReleaseNotesReporter
     {
         const converter = new showdown.Converter();
         converter.setOption("noHeaderId", true);
+        converter.setOption("disableForced4SpacesIndentedSublists", true);
         return converter.makeHtml(contentMarkdown);
     }
 }
