@@ -8,6 +8,7 @@ export interface BuildlogReport
     version?: string;
     status?: string;
     code?: string;
+    date?: Date;
     repository: Repository;
     tag: string;
     configuration: string;

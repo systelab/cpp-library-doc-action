@@ -11,7 +11,7 @@ export class BuildlogReporter
     {
         const reportFilepath =  this.getReportFilepath(buildlog);
         const reportTitle = this.getReportTitle(buildlog);
-        const reportDate = DateUtility.getCurrrentDateForHeader();
+        const reportDate = this.getReportHeaderDate(buildlog);
 
         const htmlReportContent = await this.getHTMLReportContent(buildlog);
 
@@ -46,19 +46,24 @@ export class BuildlogReporter
         return `Compilation memo for ${buildlog.repository.name} version ${buildlog.tag.substr(1)}`;
     }
 
+    private static getReportHeaderDate(buildlog: BuildlogReport): string
+    {
+        return (buildlog.date) ? DateUtility.getDateForHeader(buildlog.date) : DateUtility.getCurrrentDateForHeader();
+    }
+
     private static async getHTMLReportContent(buildlog: BuildlogReport): Promise<string>
     {
+        let logContentHTML = "";
         const logContent: string = await this.getJobLog(buildlog);
         const logContentLines: string[] = logContent.split(/\r\n|\n|\r/);
-
-        let logContentHTML = "";
         for (const logLine of logContentLines)
         {
             logContentHTML += `<div class="log-line">${logLine}</div>`;
         }
 
+        const formattedDate = (buildlog.date) ? DateUtility.getDateForContent(buildlog.date) : DateUtility.getCurrrentDateForContent();
         return `<h1>Introduction</h1>` +
-               `<p>${buildlog.repository.name} version ${buildlog.tag.substr(1)} was built on ${DateUtility.getCurrrentDateForContent()} for ` +
+               `<p>${buildlog.repository.name} version ${buildlog.tag.substr(1)} was built on ${formattedDate} for ` +
                `the "${buildlog.configuration}" configuration.</p>` +
                `<h1>Log</h1>` +
                `<div>${logContentHTML}</div>`;
