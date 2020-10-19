@@ -41,7 +41,7 @@ export class DateUtility
                 daySuffix = "nd";
                 break;
             case 3:
-                daySuffix = "rd";
+                daySuffix = (day !== 13) ? "rd" : "th";
                 break;
             default:
                 daySuffix = "th";
