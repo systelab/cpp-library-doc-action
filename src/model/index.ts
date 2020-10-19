@@ -1,4 +1,5 @@
 export * from "./automated-test-report.model";
+export * from "./buildlog-report.model";
 export * from "./configuration.model";
 export * from "./changelog-report.model";
 export * from "./ci-system.model";

@@ -1,4 +1,4 @@
-import { ContinuousIntegrationSystem, ReleaseBuild, Repository, RepositoryType } from "@model";
+import { BuildlogReport, ContinuousIntegrationSystem, ReleaseBuild, Repository, RepositoryType } from "@model";
 import { BuildlogReporter } from "@reporters";
 
 
@@ -14,13 +14,13 @@ describe("BuildlogReporter", () =>
             name: "C++ Trace API Library",
             url: "https://github.com/systelab/cpp-trace-api.git"
         };
-        const build: ReleaseBuild = {
+        const buildlogReport: BuildlogReport = {
             repository,
             tag: "v1.0.4",
             configuration: "Visual Studio 2017 Win32 Release",
             ciSystem: ContinuousIntegrationSystem.AppVeyor,
             jobId: "04qt9dlcisd8mqqc"
         };
-        await BuildlogReporter.generateBuildlogReportFile(build);
+        await BuildlogReporter.generateReport(buildlogReport);
     });
 });

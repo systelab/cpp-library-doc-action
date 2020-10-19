@@ -1,4 +1,4 @@
-import { PDFDocument, ReleaseBuild } from "@model";
+import { BuildlogReport, PDFDocument, ReleaseBuild } from "@model";
 import { BuildlogReporter, ReleaseNotesReporter, ChangelogReporter } from "@reporters";
 import { GitHubAction, GitHubRelease } from "@tools";
 
@@ -20,7 +20,8 @@ describe("Automated documentation GitHub action", () =>
 
     it("Generate build log report PDF", async () =>
     {
-        const pdfDocument: PDFDocument = await BuildlogReporter.generateBuildlogReportFile(build);
+        const buildLogReport: BuildlogReport = { ...build };
+        const pdfDocument: PDFDocument = await BuildlogReporter.generateReport(buildLogReport);
         buildLogReportFilepath = pdfDocument.filepath;
     });
 
