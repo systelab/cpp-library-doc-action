@@ -4,9 +4,14 @@ export class DateUtility
     public static getCurrrentDateForHeader(): string
     {
         const today = new Date();
-        const day = String(today.getDate()).padStart(2, "0");
-        const monthIndex = today.getMonth();
-        const year = today.getFullYear();
+        return this.getDateForHeader(today);
+    }
+
+    public static getDateForHeader(date: Date): string
+    {
+        const day = String(date.getDate()).padStart(2, "0");
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
 
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const monthName = monthNames[monthIndex];
@@ -17,9 +22,14 @@ export class DateUtility
     public static getCurrrentDateForContent(): string
     {
         const today = new Date();
-        const day = today.getDate();
-        const monthIndex = today.getMonth();
-        const year = today.getFullYear();
+        return this.getDateForContent(today);
+    }
+
+    public static getDateForContent(date: Date): string
+    {
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
 
         let daySuffix: string;
         switch (day % 10)
