@@ -47,7 +47,9 @@
             "internalConsoleOptions": "neverOpen",
             "outputCapture": "std",
             "env": {
-                "GITHUB_TOKEN": "PasteValidTokenHere"
+                "GITHUB_TOKEN": "PasteValidTokenHere",
+                "JENKINS_USERNAME": "JenkinsUsernameHere",
+                "JENKINS_PASSWORD": "JenkinsPasswordHere"
             }
         },
         {

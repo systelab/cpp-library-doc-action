@@ -6,7 +6,12 @@ export class Jenkins
     public static async getJobLog(jobId: string): Promise<string>
     {
         console.log(`Querying Jenkins for log of job '${jobId}'...`);
-        const response = await axios.get(`${jobId}/consoleText`);
+        const response = await axios.get(`${jobId}/consoleText`, {
+            auth: {
+              username: process.env.JENKINS_USERNAME,
+              password: process.env.JENKINS_PASSWORD
+            }
+        });
         if (response.status === 200)
         {
             console.log("Job log obtained successfully from Jenkins.");
