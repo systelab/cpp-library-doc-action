@@ -192,6 +192,14 @@ export class ChangelogReporter
         };
 
         const commits = await gitlog(logOptions);
+
+        if (commits.length == 0)
+        {
+            content += `<div class="commit-item">`;
+            content += `No change for ${this.getVersionName(tag)} from previous ${this.getVersionName(baseTag)}<br><br>`;
+            content += `</diV>`;
+        }
+
         for (const commit of commits)
         {
             content += `<div class="commit-item">`;
