@@ -43,7 +43,7 @@ export class BuildlogReporter
 
     private static getReportTitle(buildlog: BuildlogReport): string
     {
-        return `Compilation memo for ${buildlog.repository.name} version ${buildlog.tag.substr(1)}`;
+        return `${buildlog.repository.name} build log report for version ${buildlog.tag.substr(1)}`;
     }
 
     private static getReportHeaderDate(buildlog: BuildlogReport): string
@@ -64,7 +64,8 @@ export class BuildlogReporter
         const formattedDate = (buildlog.date) ? DateUtility.getDateForContent(buildlog.date) : DateUtility.getCurrrentDateForContent();
         return `<h1>Introduction</h1>` +
                `<p>${buildlog.repository.name} version ${buildlog.tag.substr(1)} was built on ${formattedDate} for ` +
-               `the "${buildlog.configuration}" configuration.</p>` +
+               `the "${buildlog.configuration}" configuration ` +
+               `using ${buildlog.ciSystem} continuous integration system.</p>` +
                `<h1>Log</h1>` +
                `<div>${logContentHTML}</div>`;
     }
